@@ -634,7 +634,7 @@ client.once("clientReady", () => {
 });
 
 // ===============================
-// WEB SUNUCUSUNU BAŞLAT
+// WEB SUNUCUSU
 // ===============================
 
 app.listen(
@@ -653,23 +653,27 @@ app.listen(
 );
 
 // ===============================
-// DISCORD BOTUNU BAŞLAT
+// DISCORD LOGIN
 // ===============================
+
+console.log("🔵 Discord login başlatılıyor...");
+console.log("🔵 Discord token bulundu:", !!BOT_TOKEN);
 
 client.login(BOT_TOKEN)
     .then(() => {
 
         console.log(
-            "🔄 Discord bot bağlantısı başlatıldı..."
+            "🟢 Discord login başarılı!"
         );
 
     })
     .catch((error) => {
 
         console.error(
-            "❌ Discord bot bağlantı hatası:",
-            error
+            "🔴 DISCORD LOGIN HATASI:"
         );
+
+        console.error(error);
 
     });
 
@@ -680,17 +684,19 @@ client.login(BOT_TOKEN)
 process.on("unhandledRejection", (error) => {
 
     console.error(
-        "❌ UNHANDLED REJECTION:",
-        error
+        "❌ UNHANDLED REJECTION:"
     );
+
+    console.error(error);
 
 });
 
 process.on("uncaughtException", (error) => {
 
     console.error(
-        "❌ UNCAUGHT EXCEPTION:",
-        error
+        "❌ UNCAUGHT EXCEPTION:"
     );
+
+    console.error(error);
 
 });
