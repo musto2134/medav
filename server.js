@@ -81,7 +81,8 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
         if (!client.isReady()) {
             return res.status(503).json({
                 success: false,
-                message: "Discord botu henüz hazır değil. Birkaç saniye sonra tekrar deneyin."
+                message:
+                    "Discord botu henüz hazır değil. Birkaç saniye sonra tekrar deneyin."
             });
         }
 
@@ -99,7 +100,8 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
         if (!/^\d{17,20}$/.test(discordId)) {
             return res.status(400).json({
                 success: false,
-                message: "Geçerli bir Discord Kullanıcı ID'si girin."
+                message:
+                    "Geçerli bir Discord Kullanıcı ID'si girin."
             });
         }
 
@@ -151,7 +153,8 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
             )
             .setColor(0xF1C40F)
             .setFooter({
-                text: "MedaV Roleplay • Yetkili Başvuru Sistemi"
+                text:
+                    "MedaV Roleplay • Yetkili Başvuru Sistemi"
             })
             .setTimestamp();
 
@@ -199,7 +202,8 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: "Başvuru gönderilirken bir hata oluştu."
+            message:
+                "Başvuru gönderilirken bir hata oluştu."
         });
     }
 });
@@ -218,7 +222,9 @@ client.on("interactionCreate", async (interaction) => {
 
         if (
             !interaction.member ||
-            !interaction.member.roles.cache.has(STAFF_ROLE_ID)
+            !interaction.member.roles.cache.has(
+                STAFF_ROLE_ID
+            )
         ) {
 
             return interaction.reply({
@@ -630,9 +636,6 @@ client.once("clientReady", () => {
 // ===============================
 // WEB SUNUCUSUNU BAŞLAT
 // ===============================
-// ÖNEMLİ:
-// Render'ın port kontrolü Discord'u beklemeden
-// burada gerçekleşir.
 
 app.listen(
     PORT,
@@ -655,9 +658,11 @@ app.listen(
 
 client.login(BOT_TOKEN)
     .then(() => {
+
         console.log(
             "🔄 Discord bot bağlantısı başlatıldı..."
         );
+
     })
     .catch((error) => {
 
@@ -665,4 +670,27 @@ client.login(BOT_TOKEN)
             "❌ Discord bot bağlantı hatası:",
             error
         );
+
     });
+
+// ===============================
+// EK HATA YAKALAMA
+// ===============================
+
+process.on("unhandledRejection", (error) => {
+
+    console.error(
+        "❌ UNHANDLED REJECTION:",
+        error
+    );
+
+});
+
+process.on("uncaughtException", (error) => {
+
+    console.error(
+        "❌ UNCAUGHT EXCEPTION:",
+        error
+    );
+
+});
