@@ -32,7 +32,7 @@ const STAFF_ROLE_ID = "1551830696111243295";
 
 if (!BOT_TOKEN) {
     console.error(
-        "❌ DISCORD_BOT_TOKEN Render Environment Variables içinde bulunamadı!"
+        "DISCORD_BOT_TOKEN Render Environment Variables içinde bulunamadı!"
     );
     process.exit(1);
 }
@@ -75,7 +75,6 @@ const client = new Client({
 // ===============================
 
 app.post("/api/yetkili-basvuru", async (req, res) => {
-
     try {
 
         if (!client.isReady()) {
@@ -110,9 +109,7 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
         );
 
         if (!channel) {
-            throw new Error(
-                "Başvuru kanalı bulunamadı."
-            );
+            throw new Error("Başvuru kanalı bulunamadı.");
         }
 
         if (!channel.isTextBased()) {
@@ -126,58 +123,56 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
             .substring(2, 8)
             .toUpperCase();
 
+        const description =
+            "**Başvuru No:** `" + applicationId + "`\n" +
+            "**Durum:** 🟡 Beklemede\n\n" +
+
+            "**👤 İsim:** " + (data.isim || "-") + "\n" +
+            "**🎂 Yaş:** " + (data.yas || "-") + "\n" +
+            "**🎮 Discord ID:** `" + discordId + "`\n" +
+            "**🎮 FiveM Adı:** " + (data.fivem || "-") + "\n\n" +
+
+            "**⏰ Aktiflik:** " + (data.aktiflik || "-") + "\n" +
+            "**📚 Yetkili Deneyimi:** " + (data.deneyim || "-") + "\n" +
+            "**🌐 Önceki Sunucular:** " + (data.sunucular || "-") + "\n\n" +
+
+            "**❓ Neden Yetkili Olmak İstiyor:** " + (data.neden || "-") + "\n" +
+            "**⭐ Neden Seni Seçmeliyiz:** " + (data.tercih || "-") + "\n" +
+            "**🎭 RP Bilgisi:** " + (data.rp || "-") + "\n" +
+            "**⚖️ Tartışma Yaklaşımı:** " + (data.tartisma || "-") + "\n" +
+            "**🛡️ Tarafsızlık:** " + (data.tarafsizlik || "-") + "\n" +
+            "**🤝 Anlaşmazlık Çözümü:** " + (data.anlasmazlik || "-") + "\n\n" +
+
+            "**📝 Ek Bilgi:** " + (data.ek || "-");
+
         const embed = new EmbedBuilder()
             .setTitle("📋 MedaV Yetkili Başvurusu")
-            .setDescription(
-
-                `**Başvuru No:** \`${applicationId}\`\n` +
-                `**Durum:** 🟡 Beklemede\n\n` +
-
-                `**👤 İsim:** ${data.isim || "-"}\n` +
-                `**🎂 Yaş:** ${data.yas || "-"}\n` +
-                `**🎮 Discord ID:** \`${discordId}\`\n` +
-                `**🎮 FiveM Adı:** ${data.fivem || "-"}\n\n` +
-
-                `**⏰ Aktiflik:** ${data.aktiflik || "-"}\n` +
-                `**📚 Yetkili Deneyimi:** ${data.deneyim || "-"}\n` +
-                `**🌐 Önceki Sunucular:** ${data.sunucular || "-"}\n\n` +
-
-                `**❓ Neden Yetkili Olmak İstiyor:** ${data.neden || "-"}\n` +
-                `**⭐ Neden Seni Seçmeliyiz:** ${data.tercih || "-"}\n` +
-                `**🎭 RP Bilgisi:** ${data.rp || "-"}\n` +
-                `**⚖️ Tartışma Yaklaşımı:** ${data.tartisma || "-"}\n` +
-                `**🛡️ Tarafsızlık:** ${data.tarafsizlik || "-"}\n` +
-                `**🤝 Anlaşmazlık Çözümü:** ${data.anlasmazlik || "-"}\n\n` +
-
-                `**📝 Ek Bilgi:** ${data.ek || "-"}`
-            )
+            .setDescription(description)
             .setColor(0xF1C40F)
             .setFooter({
-                text:
-                    "MedaV Roleplay • Yetkili Başvuru Sistemi"
+                text: "MedaV Roleplay • Yetkili Başvuru Sistemi"
             })
             .setTimestamp();
 
-        const buttons =
-            new ActionRowBuilder().addComponents(
+        const buttons = new ActionRowBuilder().addComponents(
 
-                new ButtonBuilder()
-                    .setCustomId(
-                        `medav_approve_${applicationId}`
-                    )
-                    .setLabel("Onayla")
-                    .setEmoji("✅")
-                    .setStyle(ButtonStyle.Success),
+            new ButtonBuilder()
+                .setCustomId(
+                    "medav_approve_" + applicationId
+                )
+                .setLabel("Onayla")
+                .setEmoji("✅")
+                .setStyle(ButtonStyle.Success),
 
-                new ButtonBuilder()
-                    .setCustomId(
-                        `medav_reject_${applicationId}`
-                    )
-                    .setLabel("Reddet")
-                    .setEmoji("❌")
-                    .setStyle(ButtonStyle.Danger)
+            new ButtonBuilder()
+                .setCustomId(
+                    "medav_reject_" + applicationId
+                )
+                .setLabel("Reddet")
+                .setEmoji("❌")
+                .setStyle(ButtonStyle.Danger)
 
-            );
+        );
 
         await channel.send({
             embeds: [embed],
@@ -185,7 +180,10 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
         });
 
         console.log(
-            `📨 Yeni başvuru: ${applicationId} | Discord ID: ${discordId}`
+            "📨 Yeni başvuru: " +
+            applicationId +
+            " | Discord ID: " +
+            discordId
         );
 
         return res.json({
@@ -226,10 +224,9 @@ client.on("interactionCreate", async (interaction) => {
                 STAFF_ROLE_ID
             )
         ) {
-
             return interaction.reply({
                 content:
-                    "❌ Bu işlemi yapmak için **MedaV Yönetim** rolüne sahip olmalısınız.",
+                    "❌ Bu işlemi yapmak için MedaV Yönetim rolüne sahip olmalısınız.",
                 ephemeral: true
             });
         }
@@ -291,10 +288,12 @@ client.on("interactionCreate", async (interaction) => {
                         );
 
                     await user.send(
-                        `🎉 **MedaV Roleplay**\n\n` +
-                        `Yetkili başvurunuz **ONAYLANDI!**\n\n` +
-                        `Başvuru No: \`${applicationId}\`\n\n` +
-                        `MedaV Yönetim ekibine hoş geldiniz.`
+                        "🎉 **MedaV Roleplay**\n\n" +
+                        "Yetkili başvurunuz **ONAYLANDI!**\n\n" +
+                        "Başvuru No: `" +
+                        applicationId +
+                        "`\n\n" +
+                        "MedaV Yönetim ekibine hoş geldiniz."
                     );
 
                 } catch (dmError) {
@@ -307,15 +306,19 @@ client.on("interactionCreate", async (interaction) => {
                     dmSuccess = false;
                 }
 
+                const updatedDescription =
+                    description.replace(
+                        "**Durum:** 🟡 Beklemede",
+                        "**Durum:** 🟢 ONAYLANDI"
+                    ) +
+                    "\n\n**Onaylayan:** " +
+                    interaction.user;
+
                 const updatedEmbed =
                     EmbedBuilder.from(oldEmbed)
                         .setColor(0x2ECC71)
                         .setDescription(
-                            description.replace(
-                                "**Durum:** 🟡 Beklemede",
-                                "**Durum:** 🟢 ONAYLANDI"
-                            ) +
-                            `\n\n**Onaylayan:** ${interaction.user}`
+                            updatedDescription
                         );
 
                 const disabledButtons =
@@ -323,7 +326,8 @@ client.on("interactionCreate", async (interaction) => {
 
                         new ButtonBuilder()
                             .setCustomId(
-                                `medav_approve_${applicationId}`
+                                "medav_approve_" +
+                                applicationId
                             )
                             .setLabel("Onaylandı")
                             .setEmoji("✅")
@@ -334,7 +338,8 @@ client.on("interactionCreate", async (interaction) => {
 
                         new ButtonBuilder()
                             .setCustomId(
-                                `medav_reject_${applicationId}`
+                                "medav_reject_" +
+                                applicationId
                             )
                             .setLabel("Reddet")
                             .setEmoji("❌")
@@ -367,12 +372,15 @@ client.on("interactionCreate", async (interaction) => {
                 );
 
                 try {
+
                     await interaction.followUp({
                         content:
                             "❌ Başvuru onaylanırken hata oluştu.",
                         ephemeral: true
                     });
+
                 } catch {}
+
             }
 
             return;
@@ -397,7 +405,8 @@ client.on("interactionCreate", async (interaction) => {
             const modal =
                 new ModalBuilder()
                     .setCustomId(
-                        `medav_reject_modal_${applicationId}`
+                        "medav_reject_modal_" +
+                        applicationId
                     )
                     .setTitle(
                         "Yetkili Başvurusunu Reddet"
@@ -460,7 +469,7 @@ client.on("interactionCreate", async (interaction) => {
 
             return interaction.reply({
                 content:
-                    "❌ Bu işlemi yapmak için **MedaV Yönetim** rolüne sahip olmalısınız.",
+                    "❌ Bu işlemi yapmak için MedaV Yönetim rolüne sahip olmalısınız.",
                 ephemeral: true
             });
         }
@@ -519,11 +528,15 @@ client.on("interactionCreate", async (interaction) => {
                     );
 
                 await user.send(
-                    `❌ **MedaV Roleplay**\n\n` +
-                    `Yetkili başvurunuz **reddedildi.**\n\n` +
-                    `Başvuru No: \`${applicationId}\`\n\n` +
-                    `**Red Sebebi:**\n${reason}\n\n` +
-                    `İlerleyen dönemlerde tekrar başvuru yapabilirsiniz.`
+                    "❌ **MedaV Roleplay**\n\n" +
+                    "Yetkili başvurunuz **reddedildi.**\n\n" +
+                    "Başvuru No: `" +
+                    applicationId +
+                    "`\n\n" +
+                    "**Red Sebebi:**\n" +
+                    reason +
+                    "\n\n" +
+                    "İlerleyen dönemlerde tekrar başvuru yapabilirsiniz."
                 );
 
             } catch (dmError) {
@@ -536,16 +549,21 @@ client.on("interactionCreate", async (interaction) => {
                 dmSuccess = false;
             }
 
+            const updatedDescription =
+                description.replace(
+                    "**Durum:** 🟡 Beklemede",
+                    "**Durum:** 🔴 REDDEDİLDİ"
+                ) +
+                "\n\n**Red Sebebi:** " +
+                reason +
+                "\n**Reddeden:** " +
+                interaction.user;
+
             const updatedEmbed =
                 EmbedBuilder.from(oldEmbed)
                     .setColor(0xE74C3C)
                     .setDescription(
-                        description.replace(
-                            "**Durum:** 🟡 Beklemede",
-                            "**Durum:** 🔴 REDDEDİLDİ"
-                        ) +
-                        `\n\n**Red Sebebi:** ${reason}` +
-                        `\n**Reddeden:** ${interaction.user}`
+                        updatedDescription
                     );
 
             const disabledButtons =
@@ -553,7 +571,8 @@ client.on("interactionCreate", async (interaction) => {
 
                     new ButtonBuilder()
                         .setCustomId(
-                            `medav_approve_${applicationId}`
+                            "medav_approve_" +
+                            applicationId
                         )
                         .setLabel("Onayla")
                         .setEmoji("✅")
@@ -564,7 +583,8 @@ client.on("interactionCreate", async (interaction) => {
 
                     new ButtonBuilder()
                         .setCustomId(
-                            `medav_reject_${applicationId}`
+                            "medav_reject_" +
+                            applicationId
                         )
                         .setLabel("Reddedildi")
                         .setEmoji("❌")
@@ -605,6 +625,7 @@ client.on("interactionCreate", async (interaction) => {
                 });
 
             } catch {}
+
         }
     }
 });
@@ -623,14 +644,53 @@ client.once("clientReady", () => {
     console.log("");
 
     console.log(
-        `🤖 Discord Bot: ${client.user.tag}`
+        "🤖 Discord Bot: " +
+        client.user.tag
     );
 
     console.log(
-        "✅ Discord botu başarıyla bağlandı."
+        "🟢 Discord botu başarıyla bağlandı."
     );
 
     console.log("");
+});
+
+// ===============================
+// DISCORD HATA / DEBUG
+// ===============================
+
+client.on("error", (error) => {
+
+    console.error(
+        "🔴 DISCORD CLIENT ERROR:"
+    );
+
+    console.error(error);
+});
+
+client.on("shardError", (error) => {
+
+    console.error(
+        "🔴 DISCORD SHARD ERROR:"
+    );
+
+    console.error(error);
+});
+
+client.on("warn", (message) => {
+
+    console.warn(
+        "🟡 DISCORD WARN:",
+        message
+    );
+});
+
+client.on("debug", (message) => {
+
+    console.log(
+        "🔧 DISCORD DEBUG:",
+        message
+    );
 });
 
 // ===============================
@@ -643,11 +703,13 @@ app.listen(
     () => {
 
         console.log(
-            `🌐 MedaV site çalışıyor. Port: ${PORT}`
+            "🌐 MedaV site çalışıyor. Port: " +
+            PORT
         );
 
         console.log(
-            `🔗 Sunucu adresi: http://0.0.0.0:${PORT}`
+            "🔗 Sunucu adresi: http://0.0.0.0:" +
+            PORT
         );
     }
 );
@@ -656,14 +718,28 @@ app.listen(
 // DISCORD LOGIN
 // ===============================
 
-console.log("🔵 Discord login başlatılıyor...");
-console.log("🔵 Discord token bulundu:", !!BOT_TOKEN);
+console.log(
+    "🔵 Discord login başlatılıyor..."
+);
+
+console.log(
+    "🔵 Discord token bulundu:",
+    !!BOT_TOKEN
+);
+
+console.log(
+    "🔵 Discord bağlantı testi hazırlanıyor..."
+);
 
 client.login(BOT_TOKEN)
     .then(() => {
 
         console.log(
             "🟢 Discord login başarılı!"
+        );
+
+        console.log(
+            "🟢 Discord Gateway bağlantısı başlatıldı."
         );
 
     })
@@ -678,7 +754,26 @@ client.login(BOT_TOKEN)
     });
 
 // ===============================
-// EK HATA YAKALAMA
+// 30 SANİYE KONTROLÜ
+// ===============================
+
+setTimeout(() => {
+
+    if (!client.isReady()) {
+
+        console.error(
+            "⏰ DISCORD BAĞLANTISI 30 SANİYE İÇİNDE HAZIR OLMADI!"
+        );
+
+        console.error(
+            "⏰ Discord Gateway bağlantısında bekliyor olabilir."
+        );
+    }
+
+}, 30000);
+
+// ===============================
+// GENEL HATA YAKALAMA
 // ===============================
 
 process.on("unhandledRejection", (error) => {
@@ -688,7 +783,6 @@ process.on("unhandledRejection", (error) => {
     );
 
     console.error(error);
-
 });
 
 process.on("uncaughtException", (error) => {
@@ -698,5 +792,4 @@ process.on("uncaughtException", (error) => {
     );
 
     console.error(error);
-
 });
