@@ -71,12 +71,93 @@ const client = new Client({
 });
 
 // ===============================
+// DISCORD API TESTİ
+// ===============================
+
+async function testDiscordAPI() {
+    console.log("");
+    console.log("=================================");
+    console.log("     DISCORD API BAĞLANTI TESTİ");
+    console.log("=================================");
+
+    try {
+        console.log("🔵 Discord API'ye bağlanılıyor...");
+
+        const response = await fetch(
+            "https://discord.com/api/v10/gateway/bot",
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bot " + BOT_TOKEN
+                }
+            }
+        );
+
+        console.log(
+            "🔵 Discord API HTTP Durumu:",
+            response.status
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+
+            console.log(
+                "🟢 DISCORD API ERİŞİMİ BAŞARILI:",
+                response.status
+            );
+
+            if (data.url) {
+                console.log(
+                    "🟢 Discord Gateway adresi alındı."
+                );
+            }
+
+            if (typeof data.session_start_limit === "object") {
+                console.log(
+                    "🟢 Discord Session bilgisi alındı."
+                );
+            }
+
+            console.log(
+                "🟢 Render → Discord API bağlantısı çalışıyor."
+            );
+        } else {
+            const errorText = await response.text();
+
+            console.error(
+                "🔴 DISCORD API HATASI:",
+                response.status
+            );
+
+            console.error(
+                "🔴 Discord API cevabı:",
+                errorText
+            );
+        }
+    } catch (error) {
+        console.error(
+            "🔴 DISCORD API ERİŞİM HATASI:"
+        );
+
+        console.error(
+            error
+        );
+
+        console.error(
+            "🔴 Render Discord API'ye ulaşamıyor olabilir."
+        );
+    }
+
+    console.log("=================================");
+    console.log("");
+}
+
+// ===============================
 // YETKİLİ BAŞVURUSU
 // ===============================
 
 app.post("/api/yetkili-basvuru", async (req, res) => {
     try {
-
         if (!client.isReady()) {
             return res.status(503).json({
                 success: false,
@@ -109,7 +190,9 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
         );
 
         if (!channel) {
-            throw new Error("Başvuru kanalı bulunamadı.");
+            throw new Error(
+                "Başvuru kanalı bulunamadı."
+            );
         }
 
         if (!channel.isTextBased()) {
@@ -124,26 +207,66 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
             .toUpperCase();
 
         const description =
-            "**Başvuru No:** `" + applicationId + "`\n" +
+            "**Başvuru No:** `" +
+            applicationId +
+            "`\n" +
+
             "**Durum:** 🟡 Beklemede\n\n" +
 
-            "**👤 İsim:** " + (data.isim || "-") + "\n" +
-            "**🎂 Yaş:** " + (data.yas || "-") + "\n" +
-            "**🎮 Discord ID:** `" + discordId + "`\n" +
-            "**🎮 FiveM Adı:** " + (data.fivem || "-") + "\n\n" +
+            "**👤 İsim:** " +
+            (data.isim || "-") +
+            "\n" +
 
-            "**⏰ Aktiflik:** " + (data.aktiflik || "-") + "\n" +
-            "**📚 Yetkili Deneyimi:** " + (data.deneyim || "-") + "\n" +
-            "**🌐 Önceki Sunucular:** " + (data.sunucular || "-") + "\n\n" +
+            "**🎂 Yaş:** " +
+            (data.yas || "-") +
+            "\n" +
 
-            "**❓ Neden Yetkili Olmak İstiyor:** " + (data.neden || "-") + "\n" +
-            "**⭐ Neden Seni Seçmeliyiz:** " + (data.tercih || "-") + "\n" +
-            "**🎭 RP Bilgisi:** " + (data.rp || "-") + "\n" +
-            "**⚖️ Tartışma Yaklaşımı:** " + (data.tartisma || "-") + "\n" +
-            "**🛡️ Tarafsızlık:** " + (data.tarafsizlik || "-") + "\n" +
-            "**🤝 Anlaşmazlık Çözümü:** " + (data.anlasmazlik || "-") + "\n\n" +
+            "**🎮 Discord ID:** `" +
+            discordId +
+            "`\n" +
 
-            "**📝 Ek Bilgi:** " + (data.ek || "-");
+            "**🎮 FiveM Adı:** " +
+            (data.fivem || "-") +
+            "\n\n" +
+
+            "**⏰ Aktiflik:** " +
+            (data.aktiflik || "-") +
+            "\n" +
+
+            "**📚 Yetkili Deneyimi:** " +
+            (data.deneyim || "-") +
+            "\n" +
+
+            "**🌐 Önceki Sunucular:** " +
+            (data.sunucular || "-") +
+            "\n\n" +
+
+            "**❓ Neden Yetkili Olmak İstiyor:** " +
+            (data.neden || "-") +
+            "\n" +
+
+            "**⭐ Neden Seni Seçmeliyiz:** " +
+            (data.tercih || "-") +
+            "\n" +
+
+            "**🎭 RP Bilgisi:** " +
+            (data.rp || "-") +
+            "\n" +
+
+            "**⚖️ Tartışma Yaklaşımı:** " +
+            (data.tartisma || "-") +
+            "\n" +
+
+            "**🛡️ Tarafsızlık:** " +
+            (data.tarafsizlik || "-") +
+            "\n" +
+
+            "**🤝 Anlaşmazlık Çözümü:** " +
+            (data.anlasmazlik || "-") +
+            "\n\n" +
+
+            "**📝 Ek Bilgi:** " +
+            (data.ek || "-");
 
         const embed = new EmbedBuilder()
             .setTitle("📋 MedaV Yetkili Başvurusu")
@@ -154,25 +277,27 @@ app.post("/api/yetkili-basvuru", async (req, res) => {
             })
             .setTimestamp();
 
-        const buttons = new ActionRowBuilder().addComponents(
+        const buttons = new ActionRowBuilder()
+            .addComponents(
 
-            new ButtonBuilder()
-                .setCustomId(
-                    "medav_approve_" + applicationId
-                )
-                .setLabel("Onayla")
-                .setEmoji("✅")
-                .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                    .setCustomId(
+                        "medav_approve_" +
+                        applicationId
+                    )
+                    .setLabel("Onayla")
+                    .setEmoji("✅")
+                    .setStyle(ButtonStyle.Success),
 
-            new ButtonBuilder()
-                .setCustomId(
-                    "medav_reject_" + applicationId
-                )
-                .setLabel("Reddet")
-                .setEmoji("❌")
-                .setStyle(ButtonStyle.Danger)
-
-        );
+                new ButtonBuilder()
+                    .setCustomId(
+                        "medav_reject_" +
+                        applicationId
+                    )
+                    .setLabel("Reddet")
+                    .setEmoji("❌")
+                    .setStyle(ButtonStyle.Danger)
+            );
 
         await channel.send({
             embeds: [embed],
@@ -267,7 +392,6 @@ client.on("interactionCreate", async (interaction) => {
                     );
 
                 if (!discordMatch) {
-
                     return interaction.followUp({
                         content:
                             "❌ Başvurudaki Discord ID bulunamadı.",
@@ -322,33 +446,33 @@ client.on("interactionCreate", async (interaction) => {
                         );
 
                 const disabledButtons =
-                    new ActionRowBuilder().addComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
 
-                        new ButtonBuilder()
-                            .setCustomId(
-                                "medav_approve_" +
-                                applicationId
-                            )
-                            .setLabel("Onaylandı")
-                            .setEmoji("✅")
-                            .setStyle(
-                                ButtonStyle.Success
-                            )
-                            .setDisabled(true),
+                            new ButtonBuilder()
+                                .setCustomId(
+                                    "medav_approve_" +
+                                    applicationId
+                                )
+                                .setLabel("Onaylandı")
+                                .setEmoji("✅")
+                                .setStyle(
+                                    ButtonStyle.Success
+                                )
+                                .setDisabled(true),
 
-                        new ButtonBuilder()
-                            .setCustomId(
-                                "medav_reject_" +
-                                applicationId
-                            )
-                            .setLabel("Reddet")
-                            .setEmoji("❌")
-                            .setStyle(
-                                ButtonStyle.Danger
-                            )
-                            .setDisabled(true)
-
-                    );
+                            new ButtonBuilder()
+                                .setCustomId(
+                                    "medav_reject_" +
+                                    applicationId
+                                )
+                                .setLabel("Reddet")
+                                .setEmoji("❌")
+                                .setStyle(
+                                    ButtonStyle.Danger
+                                )
+                                .setDisabled(true)
+                        );
 
                 await interaction.editReply({
                     embeds: [updatedEmbed],
@@ -380,7 +504,6 @@ client.on("interactionCreate", async (interaction) => {
                     });
 
                 } catch {}
-
             }
 
             return;
@@ -466,7 +589,6 @@ client.on("interactionCreate", async (interaction) => {
                 STAFF_ROLE_ID
             )
         ) {
-
             return interaction.reply({
                 content:
                     "❌ Bu işlemi yapmak için MedaV Yönetim rolüne sahip olmalısınız.",
@@ -567,33 +689,33 @@ client.on("interactionCreate", async (interaction) => {
                     );
 
             const disabledButtons =
-                new ActionRowBuilder().addComponents(
+                new ActionRowBuilder()
+                    .addComponents(
 
-                    new ButtonBuilder()
-                        .setCustomId(
-                            "medav_approve_" +
-                            applicationId
-                        )
-                        .setLabel("Onayla")
-                        .setEmoji("✅")
-                        .setStyle(
-                            ButtonStyle.Success
-                        )
-                        .setDisabled(true),
+                        new ButtonBuilder()
+                            .setCustomId(
+                                "medav_approve_" +
+                                applicationId
+                            )
+                            .setLabel("Onayla")
+                            .setEmoji("✅")
+                            .setStyle(
+                                ButtonStyle.Success
+                            )
+                            .setDisabled(true),
 
-                    new ButtonBuilder()
-                        .setCustomId(
-                            "medav_reject_" +
-                            applicationId
-                        )
-                        .setLabel("Reddedildi")
-                        .setEmoji("❌")
-                        .setStyle(
-                            ButtonStyle.Danger
-                        )
-                        .setDisabled(true)
-
-                );
+                        new ButtonBuilder()
+                            .setCustomId(
+                                "medav_reject_" +
+                                applicationId
+                            )
+                            .setLabel("Reddedildi")
+                            .setEmoji("❌")
+                            .setStyle(
+                                ButtonStyle.Danger
+                            )
+                            .setDisabled(true)
+                    );
 
             await interaction.editReply({
                 embeds: [updatedEmbed],
@@ -625,7 +747,6 @@ client.on("interactionCreate", async (interaction) => {
                 });
 
             } catch {}
-
         }
     }
 });
@@ -650,6 +771,10 @@ client.once("clientReady", () => {
 
     console.log(
         "🟢 Discord botu başarıyla bağlandı."
+    );
+
+    console.log(
+        "🟢 Discord Gateway tamamen hazır."
     );
 
     console.log("");
@@ -731,26 +856,35 @@ console.log(
     "🔵 Discord bağlantı testi hazırlanıyor..."
 );
 
-client.login(BOT_TOKEN)
-    .then(() => {
+// Önce Discord API bağlantısını test et
+testDiscordAPI()
+    .finally(() => {
 
+        console.log("");
         console.log(
-            "🟢 Discord login başarılı!"
+            "🔵 Discord Gateway login başlatılıyor..."
         );
 
-        console.log(
-            "🟢 Discord Gateway bağlantısı başlatıldı."
-        );
+        client.login(BOT_TOKEN)
+            .then(() => {
 
-    })
-    .catch((error) => {
+                console.log(
+                    "🟢 Discord login başarılı!"
+                );
 
-        console.error(
-            "🔴 DISCORD LOGIN HATASI:"
-        );
+                console.log(
+                    "🟢 Discord Gateway bağlantısı başlatıldı."
+                );
 
-        console.error(error);
+            })
+            .catch((error) => {
 
+                console.error(
+                    "🔴 DISCORD LOGIN HATASI:"
+                );
+
+                console.error(error);
+            });
     });
 
 // ===============================
