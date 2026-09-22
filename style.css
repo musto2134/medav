@@ -1208,5 +1208,5 @@ header nav .nav-links {
     margin-left: auto !important;
     margin-right: 0 !important;
     padding-left: 0 !important;
-    transform: translateX(40px) !important;
+    transform: translateX(-100px) !important;
 }
