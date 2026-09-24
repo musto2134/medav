@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
     Client,
     GatewayIntentBits,
@@ -37,11 +38,8 @@ app.use(express.json({
 
 app.use(express.static(__dirname));
 
-
 app.get("/health", (req, res) => {
-
     res.status(200).send("MedaV OK");
-
 });
 
 
@@ -55,6 +53,54 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers
     ]
+
+});
+
+
+/* =====================================================
+   DISCORD DEBUG
+===================================================== */
+
+client.on("debug", (info) => {
+
+    console.log(
+        "🔎 Discord Debug:",
+        info
+    );
+
+});
+
+client.on("warn", (info) => {
+
+    console.warn(
+        "⚠️ Discord Warn:",
+        info
+    );
+
+});
+
+client.on("shardDisconnect", (event) => {
+
+    console.error(
+        "🔴 Discord bağlantısı kesildi:",
+        event
+    );
+
+});
+
+client.on("shardReconnecting", () => {
+
+    console.log(
+        "🟡 Discord yeniden bağlanıyor..."
+    );
+
+});
+
+client.on("shardReady", (id) => {
+
+    console.log(
+        `🟢 Discord shard hazır: ${id}`
+    );
 
 });
 
@@ -98,7 +144,6 @@ client.on("error", (error) => {
     );
 
 });
-
 
 client.on("shardError", (error) => {
 
@@ -144,10 +189,6 @@ app.post(
 
         try {
 
-            /* =========================================
-               BOT
-            ========================================= */
-
             if (!client.isReady()) {
 
                 return res.status(503).json({
@@ -161,10 +202,6 @@ app.post(
 
             }
 
-
-            /* =========================================
-               VERİLER
-            ========================================= */
 
             const {
 
@@ -193,10 +230,6 @@ app.post(
             } = req.body;
 
 
-            /* =========================================
-               DISCORD ID
-            ========================================= */
-
             const discordId =
                 String(discord || "").trim();
 
@@ -217,32 +250,18 @@ app.post(
             }
 
 
-            /* =========================================
-               ZORUNLU ALANLAR
-            ========================================= */
-
             const requiredFields = [
 
                 ["discordActivity", discordActivity],
-
                 ["age", age],
-
                 ["activity", activity],
-
                 ["fivemExperience", fivemExperience],
-
                 ["previousStaff", previousStaff],
-
                 ["characterName", characterName],
-
                 ["rpExperience", rpExperience],
-
                 ["staffTeam", staffTeam],
-
                 ["whyStaff", whyStaff],
-
                 ["strongSides", strongSides],
-
                 ["weakSides", weakSides]
 
             ];
@@ -273,10 +292,6 @@ app.post(
             }
 
 
-            /* =========================================
-               ÖNCEKİ YETKİLİ
-            ========================================= */
-
             if (
                 previousStaff === "Evet" &&
                 !previousStaffExperience
@@ -293,10 +308,6 @@ app.post(
 
             }
 
-
-            /* =========================================
-               KANAL
-            ========================================= */
 
             const channel =
                 await client.channels.fetch(
@@ -318,10 +329,6 @@ app.post(
             }
 
 
-            /* =========================================
-               DISCORD KULLANICI
-            ========================================= */
-
             let discordUser = null;
 
             try {
@@ -341,10 +348,6 @@ app.post(
             const mention =
                 `<@${discordId}>`;
 
-
-            /* =========================================
-               EMBED
-            ========================================= */
 
             const embed =
                 new EmbedBuilder()
@@ -451,10 +454,6 @@ app.post(
                     .setTimestamp();
 
 
-            /* =========================================
-               BUTONLAR
-            ========================================= */
-
             const buttons =
                 new ActionRowBuilder()
                     .addComponents(
@@ -493,10 +492,6 @@ app.post(
 
                     );
 
-
-            /* =========================================
-               DISCORD'A GÖNDER
-            ========================================= */
 
             const message =
                 await channel.send({
@@ -573,10 +568,6 @@ client.on(
 
         try {
 
-            /* =================================================
-               BUTONLAR
-            ================================================= */
-
             if (interaction.isButton()) {
 
                 const customId =
@@ -618,10 +609,6 @@ client.on(
                         );
 
 
-                    /* =========================================
-                       ROL VER
-                    ========================================= */
-
                     try {
 
                         const guild =
@@ -648,10 +635,6 @@ client.on(
                     }
 
 
-                    /* =========================================
-                       DM
-                    ========================================= */
-
                     try {
 
                         const user =
@@ -674,10 +657,6 @@ client.on(
 
                     }
 
-
-                    /* =========================================
-                       EMBED
-                    ========================================= */
 
                     const oldEmbed =
                         interaction.message.embeds[0];
@@ -888,10 +867,6 @@ client.on(
                     );
 
 
-                /* =========================================
-                   DM
-                ========================================= */
-
                 try {
 
                     const user =
@@ -918,10 +893,6 @@ client.on(
 
                 }
 
-
-                /* =========================================
-                   MESAJI BUL
-                ========================================= */
 
                 try {
 
@@ -1095,7 +1066,6 @@ if (!BOT_TOKEN) {
         "🔵 Discord Gateway login başlatılıyor..."
     );
 
-
     client.login(BOT_TOKEN)
 
         .then(() => {
@@ -1109,7 +1079,10 @@ if (!BOT_TOKEN) {
         .catch((error) => {
 
             console.error(
-                "❌ Discord login başarısız:",
+                "❌ Discord login başarısız:"
+            );
+
+            console.error(
                 error
             );
 
