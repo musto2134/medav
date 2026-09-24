@@ -1,1268 +1,1066 @@
-```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MedaV Deneme</title>
+    <title>MedaV Roleplay</title>
+    <meta name="description" content="MedaV Roleplay - Kendi hikayeni kendin yaz.">
 
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        /* =====================================================
-           MEDAV BAŞVURU SİSTEMİ - TIKLAMA GARANTİLİ ALAN
-        ===================================================== */
-
-        #applicationModal {
-            position: fixed !important;
-            inset: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            display: none;
-            align-items: center !important;
-            justify-content: center !important;
-            z-index: 999999 !important;
-            pointer-events: auto !important;
-        }
-
-        #applicationModal.active {
-            display: flex !important;
-        }
-
-        #applicationModal .modal-content {
-            position: relative !important;
-            z-index: 1000000 !important;
-            pointer-events: auto !important;
-        }
-
-        #applicationModal button {
-            position: relative !important;
-            z-index: 1000001 !important;
-            pointer-events: auto !important;
-            cursor: pointer !important;
-        }
-
-        #applicationModal .form-buttons {
-            position: relative !important;
-            z-index: 1000002 !important;
-            pointer-events: auto !important;
-        }
-
-        #applicationModal .medav-submit {
-            position: relative !important;
-            z-index: 1000003 !important;
-            pointer-events: auto !important;
-            cursor: pointer !important;
-            user-select: none !important;
-        }
-
-        #applicationModal .medav-submit::before,
-        #applicationModal .medav-submit::after {
-            pointer-events: none !important;
-        }
-
-        /* Özet */
-        .medav-summary {
-            margin-top: 15px;
-            padding: 16px;
-            border-radius: 12px;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
-            line-height: 1.7;
-            word-break: break-word;
-        }
-
-        .medav-summary b {
-            color: #8e86ff;
-        }
-
-        .medav-status {
-            margin-top: 12px;
-            font-size: 13px;
-            text-align: center;
-            min-height: 20px;
-        }
-    </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header>
-    <nav>
-        <a href="#" class="logo">
-            <img src="assets/images/logo.png" alt="MedaV Logo">
-        </a>
-
-        <div class="nav-links">
-            <a href="#home">Ana Sayfa</a>
-            <a href="#about">Hakkımızda</a>
-            <a href="#features">Özellikler</a>
-            <a href="#application">Başvuru</a>
-            <a href="#discord">Discord</a>
-        </div>
-    </nav>
-</header>
-
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
-<section id="home" class="hero">
-    <div class="hero-content">
-
-        <div class="hero-logo">
-            <img src="assets/images/logo.png" alt="MedaV">
-        </div>
-
-        <h1>MedaV Roleplay</h1>
-
-        <p>
-            Kendi hikayeni kendin yaz.
-            Kaliteli roleplay deneyiminin yeni adresi.
-        </p>
-
-        <div class="hero-buttons">
-            <button
-                type="button"
-                class="form-btn primary"
-                id="heroApply">
-                Yetkili Başvurusu
-            </button>
-
-            <a
-                href="https://discord.gg/MedaV"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="form-btn">
-                Discord'a Katıl
-            </a>
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =====================================================
-     ABOUT
-===================================================== -->
-
-<section id="about" class="section">
-    <div class="container">
-
-        <div class="section-title">
-            <span>MEDAV ROLEPLAY</span>
-            <h2>Hakkımızda</h2>
-        </div>
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>Kaliteli Roleplay</h3>
-                <p>
-                    MedaV, oyuncuların kendi hikayelerini oluşturabileceği
-                    ve kaliteli roleplay yapabileceği bir ortam sunmayı amaçlar.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Whitelist Sistem</h3>
-                <p>
-                    Sunucumuz whitelist sistemiyle çalışır.
-                    Roleplay kalitesini korumak için oyuncu seçimine önem verilir.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Aktif Yönetim</h3>
-                <p>
-                    Aktif yönetim ekibi sayesinde sunucudaki sorunlar
-                    mümkün olduğunca hızlı şekilde çözüme ulaştırılır.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =====================================================
-     SERVER INFO
-===================================================== -->
-
-<section class="section">
-    <div class="container">
-
-        <div class="section-title">
-            <span>SERVER</span>
-            <h2>Sunucu Bilgileri</h2>
-        </div>
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>Whitelist</h3>
-                <p>
-                    MedaV whitelist sistemine sahip bir FiveM roleplay sunucusudur.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Roleplay</h3>
-                <p>
-                    Oyuncuların karakterlerini geliştirerek kendi hikayelerini
-                    oluşturmaları hedeflenmektedir.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Topluluk</h3>
-                <p>
-                    Aktif ve düzenli bir oyuncu topluluğu oluşturmak
-                    temel hedeflerimizden biridir.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =====================================================
-     FEATURES
-===================================================== -->
-
-<section id="features" class="section">
-    <div class="container">
-
-        <div class="section-title">
-            <span>NEDEN MEDAV?</span>
-            <h2>Özellikler</h2>
-        </div>
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>Optimize Sistemler</h3>
-                <p>
-                    Gereksiz yük oluşturmayan ve mümkün olduğunca optimize
-                    edilmiş sistemler kullanılmaktadır.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Özgün Roleplay</h3>
-                <p>
-                    Oyunculara kendi karakterlerini ve hikayelerini
-                    geliştirebilecekleri özgür bir ortam sunulur.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Aktif Yetkililer</h3>
-                <p>
-                    Sunucu düzeninin korunması için aktif yönetim ve
-                    yetkili kadrosu oluşturulmaktadır.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =====================================================
-     APPLICATION AREA
-===================================================== -->
-
-<section id="application" class="application-area section">
-
-    <div class="container">
-
-        <div class="section-title">
-            <span>EKİBİMİZE KATIL</span>
-            <h2>Yetkili Başvurusu</h2>
-        </div>
-
-        <div class="card">
-
-            <h3>MedaV Yetkili Ekibi</h3>
-
-            <p>
-                MedaV yönetim ekibinde yer almak istiyorsan
-                başvuru formunu doldurabilirsin.
-            </p>
-
-            <br>
-
-            <button
-                type="button"
-                class="form-btn primary"
-                id="openApplication">
-                Yetkili Başvurusu Yap
-            </button>
-
-        </div>
-
+    <!-- ARKA PLAN -->
+    <div class="site-bg">
+        <div class="purple-glow glow-left"></div>
+        <div class="purple-glow glow-right"></div>
+        <div class="city-lights"></div>
+        <div class="scan-lines"></div>
     </div>
 
-</section>
 
+    <!-- HEADER -->
+    <header class="header">
 
-<!-- =====================================================
-     DISCORD
-===================================================== -->
+        <div class="header-container">
 
-<section id="discord" class="section">
-    <div class="container">
-
-        <div class="section-title">
-            <span>TOPLULUK</span>
-            <h2>Discord</h2>
-        </div>
-
-        <div class="card">
-
-            <h3>MedaV Discord</h3>
-
-            <p>
-                Duyurular, destek, başvurular ve topluluk için
-                Discord sunucumuza katılabilirsin.
-            </p>
-
-            <br>
-
-            <a
-                href="https://discord.gg/MedaV"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="form-btn primary">
-                Discord'a Katıl
+            <a href="#anasayfa" class="logo">
+                <img src="assets/images/logo.png" alt="MedaV">
             </a>
 
+            <nav class="navbar">
+
+                <a href="#anasayfa" class="nav-link active">
+                    Ana Sayfa
+                </a>
+
+                <a href="#hakkimizda" class="nav-link">
+                    Hakkımızda
+                </a>
+
+                <a href="#ozellikler" class="nav-link">
+                    Özellikler
+                </a>
+
+                <a href="#basvuru" class="nav-link">
+                    Yetkili Başvurusu
+                </a>
+
+                <a href="https://discord.gg/MedaV"
+                   target="_blank"
+                   class="discord-nav">
+                    Discord
+                </a>
+
+            </nav>
+
         </div>
 
-    </div>
-</section>
+    </header>
 
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
+    <main>
 
-<footer>
-    <p>© 2026 MedaV Roleplay. Tüm hakları saklıdır.</p>
-</footer>
+        <!-- ================= HERO ================= -->
+
+        <section class="hero" id="anasayfa">
+
+            <div class="hero-content">
+
+                <div class="hero-label">
+                    <span></span>
+                    MEDAV ROLEPLAY
+                </div>
+
+                <h1>
+                    KENDİ<br>
+                    <span>HİKAYENİ</span><br>
+                    KENDİN YAZ.
+                </h1>
+
+                <p class="hero-text">
+                    MedaV, kaliteli roleplay deneyimi, özel sistemleri
+                    ve aktif topluluğuyla sana unutulmaz bir FiveM
+                    macerası sunuyor.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#hakkimizda" class="main-button">
+                        MedaV'ı Keşfet
+                        <b>→</b>
+                    </a>
+
+                    <a href="https://discord.gg/MedaV"
+                       target="_blank"
+                       class="outline-button">
+                        Discord'a Katıl
+                    </a>
+
+                </div>
 
 
-<!-- =====================================================
-     APPLICATION MODAL
-===================================================== -->
+                <div class="hero-stats">
 
-<div id="applicationModal" class="modal">
+                    <div class="hero-stat">
+                        <div class="stat-icon">♢</div>
 
-    <div class="modal-content">
+                        <div>
+                            <strong>WHITELIST</strong>
+                            <small>Kaliteli Roleplay</small>
+                        </div>
+                    </div>
 
-        <button
-            type="button"
-            id="closeApplication"
-            class="modal-close"
-            aria-label="Kapat">
-            ×
+                    <div class="stat-line"></div>
+
+                    <div class="hero-stat">
+                        <div class="stat-icon">♧</div>
+
+                        <div>
+                            <strong>7/24</strong>
+                            <small>Aktif Topluluk</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-line"></div>
+
+                    <div class="hero-stat">
+                        <div class="stat-icon">∞</div>
+
+                        <div>
+                            <strong>∞</strong>
+                            <small>Sınırsız Hikâye</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO SAĞ TARAF -->
+            <div class="hero-art">
+
+                <div class="moon"></div>
+
+                <div class="sun-glow"></div>
+
+                <div class="building building-1"></div>
+                <div class="building building-2"></div>
+                <div class="building building-3"></div>
+                <div class="building building-4"></div>
+                <div class="building building-5"></div>
+                <div class="building building-6"></div>
+                <div class="building building-7"></div>
+                <div class="building building-8"></div>
+
+                <div class="building-lights"></div>
+
+                <div class="road"></div>
+
+                <div class="hero-car">
+                    <div class="car-top"></div>
+                    <div class="car-body"></div>
+                    <div class="car-window"></div>
+                    <div class="car-light left"></div>
+                    <div class="car-light right"></div>
+                </div>
+
+                <div class="hero-person">
+                    <div class="person-head"></div>
+                    <div class="person-body"></div>
+                    <div class="person-leg left"></div>
+                    <div class="person-leg right"></div>
+                </div>
+
+                <div class="hero-slogan">
+                    <small>MEDAV</small>
+
+                    <strong>
+                        KENDİ HİKAYENİ<br>
+                        KENDİN YAZ.
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= HAKKIMIZDA ================= -->
+
+        <section class="about-section" id="hakkimizda">
+
+            <div class="about-image">
+
+                <div class="fake-city">
+
+                    <div class="fake-sun"></div>
+
+                    <div class="fake-building b1"></div>
+                    <div class="fake-building b2"></div>
+                    <div class="fake-building b3"></div>
+                    <div class="fake-building b4"></div>
+                    <div class="fake-building b5"></div>
+
+                    <div class="fake-road"></div>
+
+                    <div class="fake-person"></div>
+
+                    <div class="fake-logo">
+                        MEDAV
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="about-content">
+
+                <div class="section-label">
+                    01 — MEDAV ROLEPLAY
+                </div>
+
+                <h2>
+                    Hikâyenin<br>
+                    <span>başladığı yer.</span>
+                </h2>
+
+                <p>
+                    MedaV, oyuncuların kendi hikâyelerini oluşturabileceği,
+                    karakter gelişiminin ve kaliteli roleplay'in ön planda
+                    tutulduğu FiveM Roleplay sunucusudur.
+                </p>
+
+                <p>
+                    Şehirde vereceğin her karar, karakterinin geleceğini
+                    şekillendirir. Kendi yolunu seç, kendi düzenini kur
+                    ve kendi hikâyeni kendin yaz.
+                </p>
+
+                <a href="#ozellikler" class="small-button">
+                    Daha Fazlasını Keşfet →
+                </a>
+
+            </div>
+
+
+            <div class="about-cards">
+
+                <div class="about-card">
+                    <div class="card-icon">✦</div>
+
+                    <h3>Kaliteli RP</h3>
+
+                    <p>
+                        Roleplay standartlarını koruyan,
+                        düzenli ve aktif topluluk.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="card-icon">⚙</div>
+
+                    <h3>Özel Sistemler</h3>
+
+                    <p>
+                        MedaV için geliştirilen özel
+                        sistemlerle farklı deneyim.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="card-icon">♧</div>
+
+                    <h3>Aktif Yönetim</h3>
+
+                    <p>
+                        Oyuncuların sorunlarını önemseyen
+                        aktif yönetim ekibi.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="card-icon">▦</div>
+
+                    <h3>Canlı Şehir</h3>
+
+                    <p>
+                        Sürekli gelişen ekonomi,
+                        meslekler ve sosyal yaşam.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ÖZELLİKLER ================= -->
+
+        <section class="features-section" id="ozellikler">
+
+            <div class="features-heading">
+
+                <div>
+
+                    <div class="section-label">
+                        02 — SİSTEMLER
+                    </div>
+
+                    <h2>
+                        MedaV'ı farklı yapan
+                        <span>detaylar.</span>
+                    </h2>
+
+                </div>
+
+                <p>
+                    Şehirde geçirdiğin her dakikayı daha anlamlı
+                    hale getirmek için tasarlanan sistemler.
+                </p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        01
+                    </span>
+
+                    <div class="feature-symbol">
+                        ◇
+                    </div>
+
+                    <h3>
+                        Whitelist Sistem
+                    </h3>
+
+                    <p>
+                        Topluluk kalitesini korumak için
+                        kontrollü oyuncu kabul sistemi.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        02
+                    </span>
+
+                    <div class="feature-symbol">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Gelişmiş Roleplay
+                    </h3>
+
+                    <p>
+                        Karakterini geliştirebileceğin
+                        farklı yollar ve hikâyeler.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        03
+                    </span>
+
+                    <div class="feature-symbol">
+                        ▣
+                    </div>
+
+                    <h3>
+                        Meslekler
+                    </h3>
+
+                    <p>
+                        Kendi kariyerini oluştur,
+                        çalış ve şehirde kendi düzenini kur.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        04
+                    </span>
+
+                    <div class="feature-symbol">
+                        ◆
+                    </div>
+
+                    <h3>
+                        Legal & Illegal
+                    </h3>
+
+                    <p>
+                        Devlet görevlerinden yeraltı dünyasına
+                        kadar farklı RP yolları.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        05
+                    </span>
+
+                    <div class="feature-symbol">
+                        ♧
+                    </div>
+
+                    <h3>
+                        Aktif Yönetim
+                    </h3>
+
+                    <p>
+                        Şehrin düzenini koruyan aktif
+                        yönetim ekibi.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <span class="feature-number">
+                        06
+                    </span>
+
+                    <div class="feature-symbol">
+                        ∞
+                    </div>
+
+                    <h3>
+                        Sürekli Gelişim
+                    </h3>
+
+                    <p>
+                        Yeni sistemler, içerikler ve
+                        etkinliklerle sürekli gelişen şehir.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= BAŞVURU ================= -->
+
+        <section class="application-banner" id="basvuru">
+
+            <div class="application-bg-text">
+                MEDAV
+            </div>
+
+            <div class="application-content">
+
+                <div class="section-label">
+                    03 — EKİBİMİZE KATIL
+                </div>
+
+                <h2>
+                    MedaV'ın bir
+                    <span>parçası ol.</span>
+                </h2>
+
+                <p>
+                    Şehrin gelişimine katkıda bulunmak,
+                    oyunculara yardımcı olmak ve MedaV
+                    yönetim ekibinde yer almak istiyorsan
+                    başvurunu oluştur.
+                </p>
+
+                <button id="openApplicationButton"
+                        class="main-button">
+
+                    Yetkili Başvurusu
+
+                    <b>
+                        →
+                    </b>
+
+                </button>
+
+            </div>
+
+
+            <div class="application-slogan">
+
+                <span>
+                    KENDİ
+                </span>
+
+                <strong>
+                    HİKAYENİ
+                </strong>
+
+                <span>
+                    KENDİN YAZ.
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DISCORD ================= -->
+
+        <section class="discord-section">
+
+            <div>
+
+                <div class="section-label">
+                    04 — TOPLULUĞA KATIL
+                </div>
+
+                <h2>
+                    Şehrin kapıları
+                    <span>açık.</span>
+                </h2>
+
+                <p>
+                    Duyurular, etkinlikler, başvurular ve MedaV
+                    topluluğuyla iletişim için Discord sunucumuza katıl.
+                </p>
+
+            </div>
+
+
+            <a href="https://discord.gg/MedaV"
+               target="_blank"
+               class="discord-button">
+
+                <strong>
+                    Discord
+                </strong>
+
+                <span>
+                    Topluluğa Katıl →
+                </span>
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= MÜZİK ================= -->
+
+    <div class="music-player">
+
+        <button id="musicPlayButton"
+                class="music-button">
+            ▶
         </button>
 
+        <div class="music-info">
 
-        <!-- ================= STEP 1 ================= -->
+            <strong>
+                Yanılmışım
+            </strong>
 
-        <div class="form-step active" data-step="1">
-
-            <h2>Yetkili Başvurusu</h2>
-
-            <p>Temel bilgilerini doldur.</p>
-
-            <div class="form-group">
-                <label>Discord Kullanıcı ID</label>
-
-                <input
-                    type="text"
-                    id="discord"
-                    placeholder="Örn: 123456789012345678"
-                    maxlength="20"
-                    autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label>Discord Kullanıcı Adı</label>
-
-                <input
-                    type="text"
-                    id="discordName"
-                    placeholder="Örn: musto"
-                    maxlength="50">
-            </div>
-
-            <div class="form-buttons">
-
-                <button
-                    type="button"
-                    class="form-btn primary medav-next"
-                    data-next="2">
-                    Devam Et →
-                </button>
-
-            </div>
+            <span>
+                Yung Ouzo
+            </span>
 
         </div>
 
+        <button id="musicMuteButton"
+                class="music-button">
+            🔊
+        </button>
 
-        <!-- ================= STEP 2 ================= -->
+        <input id="musicVolume"
+               type="range"
+               min="0"
+               max="1"
+               step="0.01"
+               value="0.5">
 
-        <div class="form-step" data-step="2">
+    </div>
 
-            <h2>Kişisel Bilgiler</h2>
 
-            <p>Başvurun hakkında birkaç bilgi ver.</p>
+    <!-- ================= BAŞVURU MODAL ================= -->
 
-            <div class="form-group">
-                <label>Yaş</label>
+    <div id="applicationModal"
+         class="modal">
 
-                <input
-                    type="number"
-                    id="age"
-                    min="13"
-                    max="99"
-                    placeholder="Yaşın">
-            </div>
+        <div class="modal-overlay"></div>
 
-            <div class="form-group">
-                <label>Günlük Ortalama Aktiflik</label>
+        <div class="modal-box">
 
-                <input
-                    type="text"
-                    id="activity"
-                    placeholder="Örn: 4-5 saat">
-            </div>
+            <button id="closeApplicationButton"
+                    class="modal-close">
+                ×
+            </button>
 
-            <div class="form-group">
-                <label>FiveM Tecrüben</label>
 
-                <input
-                    type="text"
-                    id="fivemExperience"
-                    placeholder="Örn: 2 yıl">
-            </div>
+            <div class="modal-header">
 
-            <div class="form-buttons">
+                <span>
+                    MEDAV ROLEPLAY
+                </span>
 
-                <button
-                    type="button"
-                    class="form-btn medav-prev"
-                    data-prev="1">
-                    ← Geri
-                </button>
+                <h2>
+                    Yetkili Başvurusu
+                </h2>
 
-                <button
-                    type="button"
-                    class="form-btn primary medav-next"
-                    data-next="3">
-                    Devam Et →
-                </button>
+                <p>
+                    Formu eksiksiz doldur ve başvurunu oluştur.
+                </p>
 
             </div>
 
-        </div>
 
+            <div class="progress-container">
 
-        <!-- ================= STEP 3 ================= -->
+                <div class="progress-bar">
 
-        <div class="form-step" data-step="3">
+                    <div id="applicationProgress">
+                    </div>
 
-            <h2>Roleplay Bilgileri</h2>
-
-            <p>Roleplay geçmişini ve düşüncelerini belirt.</p>
-
-            <div class="form-group">
-                <label>Karakter Adı</label>
-
-                <input
-                    type="text"
-                    id="characterName"
-                    placeholder="Karakter adın">
-            </div>
-
-            <div class="form-group">
-                <label>Roleplay Tecrübesi</label>
-
-                <textarea
-                    id="rpExperience"
-                    rows="4"
-                    placeholder="Roleplay geçmişinden bahset..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Neden MedaV Yetkilisi Olmak İstiyorsun?</label>
-
-                <textarea
-                    id="whyStaff"
-                    rows="4"
-                    placeholder="Kısaca açıklayabilirsin..."></textarea>
-            </div>
-
-            <div class="form-buttons">
-
-                <button
-                    type="button"
-                    class="form-btn medav-prev"
-                    data-prev="2">
-                    ← Geri
-                </button>
-
-                <button
-                    type="button"
-                    class="form-btn primary medav-next"
-                    data-next="4">
-                    Devam Et →
-                </button>
+                </div>
 
             </div>
 
-        </div>
+
+            <form id="applicationForm"
+                  novalidate>
 
 
-        <!-- ================= STEP 4 ================= -->
+                <!-- ================= STEP 1 ================= -->
 
-        <div class="form-step" data-step="4">
+                <div class="form-step active"
+                     data-step="1">
 
-            <h2>Başvuruyu Gönder</h2>
+                    <div class="step-title">
 
-            <p>
-                Bilgilerini kontrol et. Her şey doğruysa
-                başvurunu gönderebilirsin.
-            </p>
+                        <span>
+                            01
+                        </span>
 
-            <div
-                id="applicationSummary"
-                class="medav-summary">
-                Bilgiler hazırlanıyor...
-            </div>
+                        Kişisel Bilgiler
 
-            <div
-                id="applicationStatus"
-                class="medav-status">
-            </div>
+                    </div>
 
-            <div class="form-buttons">
 
-                <button
-                    type="button"
-                    class="form-btn medav-prev"
-                    data-prev="3">
-                    ← Geri
-                </button>
+                    <label>
 
-                <button
-                    type="button"
-                    class="form-btn primary medav-submit"
-                    data-submit="true">
-                    📩 Başvuruyu Gönder
-                </button>
+                        Ad Soyad
 
-            </div>
+                        <input id="appName"
+                               type="text"
+                               placeholder="Adınız ve soyadınız"
+                               required>
+
+                    </label>
+
+
+                    <label>
+
+                        Yaş
+
+                        <input id="appAge"
+                               name="age"
+                               type="number"
+                               min="13"
+                               max="99"
+                               placeholder="Yaşınız"
+                               required>
+
+                    </label>
+
+
+                    <label>
+
+                        FiveM Deneyimi
+
+                        <input id="appFiveMTime"
+                               type="text"
+                               placeholder="Örn: 2 yıl"
+                               required>
+
+                    </label>
+
+
+                    <label>
+
+                        Discord ID
+
+                        <input id="appDiscord"
+                               name="discord"
+                               type="text"
+                               inputmode="numeric"
+                               pattern="[0-9]{17,20}"
+                               placeholder="Örn: 123456789012345678"
+                               required>
+
+                        <small class="form-hint">
+                            Discord ID'nizi girin.
+                            Başvurunuz onaylandığında size
+                            Discord üzerinden DM gönderilecektir.
+                        </small>
+
+                    </label>
+
+                </div>
+
+
+                <!-- ================= STEP 2 ================= -->
+
+                <div class="form-step"
+                     data-step="2">
+
+                    <div class="step-title">
+
+                        <span>
+                            02
+                        </span>
+
+                        Deneyim
+
+                    </div>
+
+
+                    <label>
+
+                        Günlük Aktiflik
+
+                        <input id="appActivity"
+                               type="text"
+                               placeholder="Örn: 5-6 saat"
+                               required>
+
+                    </label>
+
+
+                    <div class="radio-group">
+
+                        <span>
+                            Daha önce yetkili oldunuz mu?
+                        </span>
+
+
+                        <label class="radio-option">
+
+                            <input type="radio"
+                                   name="experience"
+                                   value="Evet">
+
+                            Evet
+
+                        </label>
+
+
+                        <label class="radio-option">
+
+                            <input type="radio"
+                                   name="experience"
+                                   value="Hayır">
+
+                            Hayır
+
+                        </label>
+
+                    </div>
+
+
+                    <label>
+
+                        Önceki Sunucular
+
+                        <textarea id="appServers"
+                                  placeholder="Varsa önceki sunucularınızı yazın"></textarea>
+
+                    </label>
+
+                </div>
+
+
+                <!-- ================= STEP 3 ================= -->
+
+                <div class="form-step"
+                     data-step="3">
+
+                    <div class="step-title">
+
+                        <span>
+                            03
+                        </span>
+
+                        Roleplay
+
+                    </div>
+
+
+                    <label>
+
+                        Neden MedaV?
+
+                        <textarea id="appWhyJoin"
+                                  required></textarea>
+
+                    </label>
+
+
+                    <label>
+
+                        Neden Sizi Seçmeliyiz?
+
+                        <textarea id="appWhyYou"
+                                  required></textarea>
+
+                    </label>
+
+
+                    <label>
+
+                        Roleplay Bilginiz
+
+                        <textarea id="appRpKnowledge"
+                                  required></textarea>
+
+                    </label>
+
+                </div>
+
+
+                <!-- ================= STEP 4 ================= -->
+
+                <div class="form-step"
+                     data-step="4">
+
+                    <div class="step-title">
+
+                        <span>
+                            04
+                        </span>
+
+                        Yönetim
+
+                    </div>
+
+
+                    <label>
+
+                        Tartışma Durumunda Ne Yaparsınız?
+
+                        <textarea id="appArgument"
+                                  required></textarea>
+
+                    </label>
+
+
+                    <label>
+
+                        Tarafsızlığınızı Nasıl Korursunuz?
+
+                        <textarea id="appNeutrality"
+                                  required></textarea>
+
+                    </label>
+
+
+                    <label>
+
+                        Ekip İçerisinde Anlaşmazlık Olursa?
+
+                        <textarea id="appTeamConflict"
+                                  required></textarea>
+
+                    </label>
+
+                </div>
+
+
+                <!-- ================= STEP 5 ================= -->
+
+                <div class="form-step"
+                     data-step="5">
+
+                    <div class="step-title">
+
+                        <span>
+                            05
+                        </span>
+
+                        Son Adım
+
+                    </div>
+
+
+                    <label>
+
+                        Eklemek İstediğiniz Not
+
+                        <textarea id="appExtra"
+                                  placeholder="Eklemek istediğiniz başka bir şey varsa yazabilirsiniz."></textarea>
+
+                    </label>
+
+
+                    <div class="form-finish">
+
+                        <div>
+                            ✓
+                        </div>
+
+                        <h3>
+                            Başvurun hazır.
+                        </h3>
+
+                        <p>
+                            Bilgilerinizi kontrol ettikten sonra
+                            başvurunuzu gönderebilirsiniz.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= FORM BUTONLARI ================= -->
+
+                <div class="form-buttons">
+
+                    <button type="button"
+                            id="previousStepButton"
+                            class="form-btn secondary">
+
+                        ← Geri
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nextStepButton"
+                            class="form-btn primary">
+
+                        Devam Et →
+
+                    </button>
+
+
+                    <button type="submit"
+                            id="submitApplicationButton"
+                            class="form-btn primary">
+
+                        Başvuruyu Gönder
+
+                    </button>
+
+                </div>
+
+
+            </form>
 
         </div>
 
     </div>
 
-</div>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-brand">
+
+            <img src="assets/images/logo.png"
+                 alt="MedaV">
+
+            <div>
+
+                <strong>
+                    MEDAV ROLEPLAY
+                </strong>
+
+                <span>
+                    KENDİ HİKAYENİ KENDİN YAZ.
+                </span>
+
+            </div>
+
+        </div>
 
 
-<!-- =====================================================
-     MUSIC PLAYER
-===================================================== -->
+        <div class="footer-links">
 
-<div class="music-player">
+            <a href="#anasayfa">
+                Ana Sayfa
+            </a>
 
-    <audio
-        id="medavAudio"
-        src="assets/images/audio/medav_fixed.mp3"
-        preload="auto">
+            <a href="#hakkimizda">
+                Hakkımızda
+            </a>
+
+            <a href="#ozellikler">
+                Özellikler
+            </a>
+
+            <a href="#basvuru">
+                Yetkili Başvurusu
+            </a>
+
+        </div>
+
+
+        <a href="https://discord.gg/MedaV"
+           target="_blank"
+           class="footer-discord">
+
+            Discord →
+
+        </a>
+
+
+        <div class="footer-bottom">
+
+            © 2026 MedaV Roleplay.
+            Tüm hakları saklıdır.
+
+            <span>
+                KENDİ HİKAYENİ KENDİN YAZ.
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= MÜZİK ================= -->
+
+    <audio id="medavMusic"
+           preload="auto"
+           loop>
+
+        <source src="assets/music/medav.mp3"
+                type="audio/mpeg">
+
     </audio>
 
-    <button
-        type="button"
-        id="musicButton">
-        ▶
-    </button>
 
-    <input
-        type="range"
-        id="volumeControl"
-        min="0"
-        max="1"
-        step="0.01"
-        value="0.5">
-
-</div>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    console.log("🟢 MedaV sistemi başlatılıyor...");
-
-
-    /* =====================================================
-       MODAL
-    ===================================================== */
-
-    const modal = document.getElementById("applicationModal");
-    const openButton = document.getElementById("openApplication");
-    const heroButton = document.getElementById("heroApply");
-    const closeButton = document.getElementById("closeApplication");
-
-    const steps = document.querySelectorAll(".form-step");
-
-
-    function openModal() {
-
-        modal.classList.add("active");
-
-        document.body.style.overflow = "hidden";
-
-        showStep(1);
-
-        console.log("🟢 Başvuru modalı açıldı.");
-    }
-
-
-    function closeModal() {
-
-        modal.classList.remove("active");
-
-        document.body.style.overflow = "";
-
-        console.log("🔴 Başvuru modalı kapatıldı.");
-    }
-
-
-    if (openButton) {
-        openButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            openModal();
-        });
-    }
-
-
-    if (heroButton) {
-        heroButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            openModal();
-        });
-    }
-
-
-    if (closeButton) {
-        closeButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            closeModal();
-        });
-    }
-
-
-    modal.addEventListener("click", function (event) {
-
-        if (event.target === modal) {
-            closeModal();
-        }
-
-    });
-
-
-    /* =====================================================
-       STEP SİSTEMİ
-    ===================================================== */
-
-    function showStep(number) {
-
-        steps.forEach(function (step) {
-
-            const stepNumber =
-                Number(step.dataset.step);
-
-            step.classList.toggle(
-                "active",
-                stepNumber === number
-            );
-
-        });
-
-
-        if (number === 4) {
-            updateSummary();
-        }
-
-        console.log("📄 Aktif adım:", number);
-    }
-
-
-    function getValue(id) {
-
-        const element =
-            document.getElementById(id);
-
-        if (!element) return "";
-
-        return element.value.trim();
-    }
-
-
-    function validateStep(number) {
-
-        if (number === 1) {
-
-            const discord = getValue("discord");
-            const discordName = getValue("discordName");
-
-            if (!/^\d{17,20}$/.test(discord)) {
-
-                alert(
-                    "Geçerli bir Discord Kullanıcı ID'si gir.\n\nÖrnek: 123456789012345678"
-                );
-
-                return false;
-            }
-
-
-            if (!discordName) {
-
-                alert("Discord kullanıcı adını gir.");
-
-                return false;
-            }
-
-        }
-
-
-        if (number === 2) {
-
-            const age = getValue("age");
-            const activity = getValue("activity");
-            const experience = getValue("fivemExperience");
-
-            if (!age) {
-                alert("Yaşını gir.");
-                return false;
-            }
-
-            if (!activity) {
-                alert("Günlük aktiflik süreni gir.");
-                return false;
-            }
-
-            if (!experience) {
-                alert("FiveM tecrübeni gir.");
-                return false;
-            }
-
-        }
-
-
-        if (number === 3) {
-
-            const characterName =
-                getValue("characterName");
-
-            const rpExperience =
-                getValue("rpExperience");
-
-            const whyStaff =
-                getValue("whyStaff");
-
-
-            if (!characterName) {
-                alert("Karakter adını gir.");
-                return false;
-            }
-
-            if (!rpExperience) {
-                alert("Roleplay tecrübeni yaz.");
-                return false;
-            }
-
-            if (!whyStaff) {
-                alert(
-                    "Neden MedaV yetkilisi olmak istediğini yaz."
-                );
-
-                return false;
-            }
-
-        }
-
-
-        return true;
-    }
-
-
-    document
-        .querySelectorAll(".medav-next")
-        .forEach(function (button) {
-
-            button.addEventListener(
-                "click",
-                function (event) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    const currentStep =
-                        Number(
-                            button
-                                .closest(".form-step")
-                                .dataset.step
-                        );
-
-                    const nextStep =
-                        Number(button.dataset.next);
-
-
-                    if (!validateStep(currentStep)) {
-                        return;
-                    }
-
-
-                    showStep(nextStep);
-
-                },
-                true
-            );
-
-        });
-
-
-    document
-        .querySelectorAll(".medav-prev")
-        .forEach(function (button) {
-
-            button.addEventListener(
-                "click",
-                function (event) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    const previousStep =
-                        Number(button.dataset.prev);
-
-                    showStep(previousStep);
-
-                },
-                true
-            );
-
-        });
-
-
-    /* =====================================================
-       ÖZET
-    ===================================================== */
-
-    function updateSummary() {
-
-        const summary =
-            document.getElementById(
-                "applicationSummary"
-            );
-
-
-        summary.innerHTML = `
-            <div><b>Discord ID:</b> ${escapeHTML(getValue("discord"))}</div>
-            <div><b>Discord:</b> ${escapeHTML(getValue("discordName"))}</div>
-            <div><b>Yaş:</b> ${escapeHTML(getValue("age"))}</div>
-            <div><b>Aktiflik:</b> ${escapeHTML(getValue("activity"))}</div>
-            <div><b>FiveM Tecrübesi:</b> ${escapeHTML(getValue("fivemExperience"))}</div>
-            <div><b>Karakter:</b> ${escapeHTML(getValue("characterName"))}</div>
-            <br>
-            <div><b>Roleplay Tecrübesi:</b></div>
-            <div>${escapeHTML(getValue("rpExperience"))}</div>
-            <br>
-            <div><b>Yetkili Olma Sebebi:</b></div>
-            <div>${escapeHTML(getValue("whyStaff"))}</div>
-        `;
-    }
-
-
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-    /* =====================================================
-       GÖNDER BUTONU
-       ID YOK!
-       CLASS + data-submit ÜZERİNDEN BULUYORUZ.
-    ===================================================== */
-
-    const submitButton =
-        document.querySelector(
-            '.medav-submit[data-submit="true"]'
-        );
-
-
-    console.log(
-        "📩 Gönder butonu:",
-        submitButton
-    );
-
-
-    if (!submitButton) {
-
-        console.error(
-            "❌ Gönder butonu bulunamadı!"
-        );
-
-    } else {
-
-        submitButton.addEventListener(
-            "click",
-            async function (event) {
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                console.log(
-                    "🟢 BAŞVURU GÖNDER BUTONUNA BASILDI!"
-                );
-
-
-                /* Tekrar kontrol */
-
-                if (!validateStep(3)) {
-                    return;
-                }
-
-
-                const status =
-                    document.getElementById(
-                        "applicationStatus"
-                    );
-
-
-                submitButton.disabled = true;
-
-                submitButton.style.pointerEvents =
-                    "none";
-
-                submitButton.style.opacity =
-                    "0.6";
-
-
-                status.textContent =
-                    "Başvuru gönderiliyor...";
-
-
-                const data = {
-
-                    discord:
-                        getValue("discord"),
-
-                    discordName:
-                        getValue("discordName"),
-
-                    age:
-                        getValue("age"),
-
-                    activity:
-                        getValue("activity"),
-
-                    fivemExperience:
-                        getValue("fivemExperience"),
-
-                    characterName:
-                        getValue("characterName"),
-
-                    rpExperience:
-                        getValue("rpExperience"),
-
-                    whyStaff:
-                        getValue("whyStaff")
-
-                };
-
-
-                console.log(
-                    "📤 Sunucuya gönderilen veri:",
-                    data
-                );
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            "/api/yetkili-basvuru",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify(data)
-                            }
-                        );
-
-
-                    console.log(
-                        "📥 HTTP durum:",
-                        response.status
-                    );
-
-
-                    let result = {};
-
-                    try {
-
-                        result =
-                            await response.json();
-
-                    } catch (jsonError) {
-
-                        console.error(
-                            "JSON okunamadı:",
-                            jsonError
-                        );
-
-                    }
-
-
-                    console.log(
-                        "📥 Server cevabı:",
-                        result
-                    );
-
-
-                    if (
-                        response.ok &&
-                        result.success
-                    ) {
-
-                        status.textContent =
-                            "Başvurun başarıyla gönderildi!";
-
-                        alert(
-                            "Başvurun başarıyla gönderildi!"
-                        );
-
-
-                        /* Formu temizle */
-
-                        document
-                            .querySelectorAll(
-                                "#applicationModal input, #applicationModal textarea"
-                            )
-                            .forEach(function (input) {
-
-                                input.value = "";
-
-                            });
-
-
-                        showStep(1);
-
-                        closeModal();
-
-
-                    } else {
-
-                        throw new Error(
-                            result.message ||
-                            "Başvuru gönderilemedi."
-                        );
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "❌ Başvuru hatası:",
-                        error
-                    );
-
-
-                    status.textContent =
-                        error.message ||
-                        "Başvuru gönderilirken hata oluştu.";
-
-
-                    alert(
-                        error.message ||
-                        "Başvuru gönderilirken hata oluştu."
-                    );
-
-
-                } finally {
-
-                    submitButton.disabled =
-                        false;
-
-                    submitButton.style.pointerEvents =
-                        "auto";
-
-                    submitButton.style.opacity =
-                        "1";
-
-                }
-
-            },
-            true
-        );
-
-    }
-
-
-    /* =====================================================
-       ESC İLE MODAL KAPATMA
-    ===================================================== */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                modal.classList.contains("active")
-            ) {
-
-                closeModal();
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       MUSIC PLAYER
-    ===================================================== */
-
-    const audio =
-        document.getElementById("medavAudio");
-
-    const musicButton =
-        document.getElementById("musicButton");
-
-    const volumeControl =
-        document.getElementById("volumeControl");
-
-
-    if (audio && musicButton) {
-
-        audio.volume =
-            volumeControl
-                ? Number(volumeControl.value)
-                : 0.5;
-
-
-        musicButton.addEventListener(
-            "click",
-            async function () {
-
-                try {
-
-                    if (audio.paused) {
-
-                        await audio.play();
-
-                        musicButton.textContent =
-                            "⏸";
-
-                    } else {
-
-                        audio.pause();
-
-                        musicButton.textContent =
-                            "▶";
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "Müzik oynatma hatası:",
-                        error
-                    );
-
-                }
-
-            }
-        );
-
-
-        audio.addEventListener(
-            "ended",
-            function () {
-
-                musicButton.textContent =
-                    "▶";
-
-            }
-        );
-
-    }
-
-
-    if (volumeControl && audio) {
-
-        volumeControl.addEventListener(
-            "input",
-            function () {
-
-                audio.volume =
-                    Number(
-                        volumeControl.value
-                    );
-
-            }
-        );
-
-    }
-
-
-    console.log(
-        "🟢 MedaV sistemi tamamen hazır."
-    );
-
-});
-
-</script>
+    <script src="script.js"></script>
 
 </body>
 </html>
-```

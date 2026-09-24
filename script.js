@@ -1,168 +1,1399 @@
-let currentStep = 0;
+/* =========================================================
+   MEDAV ROLEPLAY
+   WEBSITE SCRIPT
+========================================================= */
 
-const steps = document.querySelectorAll(".step");
-const modal = document.getElementById("applicationModal");
-const progressBar = document.getElementById("progressBar");
-const stepText = document.getElementById("stepText");
-const backButton = document.getElementById("backButton");
-const nextButton = document.getElementById("nextButton");
-const form = document.getElementById("applicationForm");
-const summary = document.getElementById("applicationSummary");
+document.addEventListener("DOMContentLoaded", () => {
 
-function openApplication() {
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
+    /* =====================================================
+       ELEMENTLER
+    ===================================================== */
 
-    currentStep = 0;
-    showStep();
-}
+    const applicationModal =
+        document.getElementById("applicationModal");
 
-function closeApplication() {
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
-}
+    const openApplicationButton =
+        document.getElementById("openApplicationButton");
 
-function showStep() {
-    steps.forEach((step, index) => {
-        step.classList.toggle("active", index === currentStep);
+    const closeApplicationButton =
+        document.getElementById("closeApplicationButton");
+
+    const modalOverlay =
+        document.querySelector(".modal-overlay");
+
+    const applicationForm =
+        document.getElementById("applicationForm");
+
+    const nextStepButton =
+        document.getElementById("nextStepButton");
+
+    const previousStepButton =
+        document.getElementById("previousStepButton");
+
+    const submitApplicationButton =
+        document.getElementById("submitApplicationButton");
+
+    const applicationProgress =
+        document.getElementById("applicationProgress");
+
+    const formSteps =
+        document.querySelectorAll(".form-step");
+
+
+    /* =====================================================
+       BAŞVURU ADIMLARI
+    ===================================================== */
+
+    let currentStep = 1;
+
+    const totalSteps = formSteps.length;
+
+
+    /* =====================================================
+       MODAL AÇ
+    ===================================================== */
+
+    function openApplication() {
+
+        if (!applicationModal) {
+            return;
+        }
+
+        applicationModal.classList.add("active");
+
+        document.body.classList.add("modal-open");
+
+        currentStep = 1;
+
+        updateStep();
+
+    }
+
+
+    /* =====================================================
+       MODAL KAPAT
+    ===================================================== */
+
+    function closeApplication() {
+
+        if (!applicationModal) {
+            return;
+        }
+
+        applicationModal.classList.remove("active");
+
+        document.body.classList.remove("modal-open");
+
+    }
+
+
+    if (openApplicationButton) {
+
+        openApplicationButton.addEventListener(
+            "click",
+            openApplication
+        );
+
+    }
+
+
+    if (closeApplicationButton) {
+
+        closeApplicationButton.addEventListener(
+            "click",
+            closeApplication
+        );
+
+    }
+
+
+    if (modalOverlay) {
+
+        modalOverlay.addEventListener(
+            "click",
+            closeApplication
+        );
+
+    }
+
+
+    /* =====================================================
+       ESC İLE KAPAT
+    ===================================================== */
+
+    document.addEventListener("keydown", (event) => {
+
+        if (
+            event.key === "Escape" &&
+            applicationModal &&
+            applicationModal.classList.contains("active")
+        ) {
+
+            closeApplication();
+
+        }
+
     });
 
-    const totalSteps = steps.length;
 
-    stepText.textContent = `Adım ${currentStep + 1} / ${totalSteps}`;
+    /* =====================================================
+       INPUT DEĞERİ
+    ===================================================== */
 
-    const progress = ((currentStep + 1) / totalSteps) * 100;
-    progressBar.style.width = `${progress}%`;
+    function getValue(id) {
 
-    if (currentStep === 0) {
-        backButton.style.visibility = "hidden";
-    } else {
-        backButton.style.visibility = "visible";
-    }
+        const element =
+            document.getElementById(id);
 
-    if (currentStep === totalSteps - 1) {
-        nextButton.textContent = "Başvuruyu Gönder";
-        updateSummary();
-    } else {
-        nextButton.textContent = "İleri →";
-    }
-}
-
-function validateCurrentStep() {
-    const current = steps[currentStep];
-
-    const fields = current.querySelectorAll(
-        "input[required], textarea[required], select[required]"
-    );
-
-    for (const field of fields) {
-        if (!field.value.trim()) {
-            field.focus();
-            alert("Lütfen tüm zorunlu alanları doldurun.");
-            return false;
+        if (!element) {
+            return "";
         }
+
+        return String(element.value || "").trim();
+
     }
 
-    return true;
-}
 
-function nextStep() {
-    if (!validateCurrentStep()) {
-        return;
+    /* =====================================================
+       RADIO DEĞERİ
+    ===================================================== */
+
+    function getRadioValue(name) {
+
+        const checked =
+            document.querySelector(
+                `input[name="${name}"]:checked`
+            );
+
+        return checked
+            ? checked.value.trim()
+            : "";
+
     }
 
-    if (currentStep < steps.length - 1) {
-        currentStep++;
-        showStep();
-    } else {
-        submitApplication();
+
+    /* =====================================================
+       ADIM KONTROLÜ
+    ===================================================== */
+
+    function validateStep(step) {
+
+        let valid = true;
+
+        let firstInvalid = null;
+
+
+        /* ================================================
+           STEP 1
+        ================================================ */
+
+        if (step === 1) {
+
+            const name =
+                getValue("appName");
+
+            const age =
+                getValue("appAge");
+
+            const fivem =
+                getValue("appFiveMTime");
+
+            const discord =
+                getValue("appDiscord");
+
+
+            if (!name) {
+
+                showFormError(
+                    "Lütfen adınızı ve soyadınızı gir."
+                );
+
+                firstInvalid =
+                    document.getElementById("appName");
+
+                valid = false;
+
+            }
+
+
+            if (valid && !age) {
+
+                showFormError(
+                    "Lütfen yaşınızı gir."
+                );
+
+                firstInvalid =
+                    document.getElementById("appAge");
+
+                valid = false;
+
+            }
+
+
+            if (valid) {
+
+                const numericAge =
+                    Number(age);
+
+                if (
+                    !Number.isFinite(numericAge) ||
+                    numericAge < 13 ||
+                    numericAge > 99
+                ) {
+
+                    showFormError(
+                        "Yaş 13 ile 99 arasında olmalıdır."
+                    );
+
+                    firstInvalid =
+                        document.getElementById("appAge");
+
+                    valid = false;
+
+                }
+
+            }
+
+
+            if (valid && !fivem) {
+
+                showFormError(
+                    "Lütfen FiveM deneyiminizi yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appFiveMTime"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !discord) {
+
+                showFormError(
+                    "Lütfen Discord Kullanıcı ID'nizi gir."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appDiscord"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid) {
+
+                if (!/^\d{17,20}$/.test(discord)) {
+
+                    showFormError(
+                        "Geçerli bir Discord Kullanıcı ID'si gir. Örnek: 123456789012345678"
+                    );
+
+                    firstInvalid =
+                        document.getElementById(
+                            "appDiscord"
+                        );
+
+                    valid = false;
+
+                }
+
+            }
+
+        }
+
+
+        /* ================================================
+           STEP 2
+        ================================================ */
+
+        if (step === 2) {
+
+            const activity =
+                getValue("appActivity");
+
+            const previousStaff =
+                getRadioValue("experience");
+
+            const previousServers =
+                getValue("appServers");
+
+
+            if (!activity) {
+
+                showFormError(
+                    "Lütfen günlük aktiflik süreni yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appActivity"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !previousStaff) {
+
+                showFormError(
+                    "Daha önce yetkili olup olmadığını seç."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (
+                valid &&
+                previousStaff === "Evet" &&
+                !previousServers
+            ) {
+
+                showFormError(
+                    "Daha önce yetkili olduysan önceki sunucularını veya deneyimini belirt."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appServers"
+                    );
+
+                valid = false;
+
+            }
+
+        }
+
+
+        /* ================================================
+           STEP 3
+        ================================================ */
+
+        if (step === 3) {
+
+            const whyJoin =
+                getValue("appWhyJoin");
+
+            const whyYou =
+                getValue("appWhyYou");
+
+            const rpKnowledge =
+                getValue("appRpKnowledge");
+
+
+            if (!whyJoin) {
+
+                showFormError(
+                    "Lütfen neden MedaV'a katılmak istediğini yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appWhyJoin"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !whyYou) {
+
+                showFormError(
+                    "Lütfen neden seni seçmemiz gerektiğini yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appWhyYou"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !rpKnowledge) {
+
+                showFormError(
+                    "Lütfen Roleplay bilgin hakkında bilgi ver."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appRpKnowledge"
+                    );
+
+                valid = false;
+
+            }
+
+        }
+
+
+        /* ================================================
+           STEP 4
+        ================================================ */
+
+        if (step === 4) {
+
+            const argument =
+                getValue("appArgument");
+
+            const neutrality =
+                getValue("appNeutrality");
+
+            const teamConflict =
+                getValue("appTeamConflict");
+
+
+            if (!argument) {
+
+                showFormError(
+                    "Lütfen tartışma durumunda ne yapacağını yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appArgument"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !neutrality) {
+
+                showFormError(
+                    "Lütfen tarafsızlığını nasıl koruyacağını yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appNeutrality"
+                    );
+
+                valid = false;
+
+            }
+
+
+            if (valid && !teamConflict) {
+
+                showFormError(
+                    "Lütfen ekip içindeki anlaşmazlıkları nasıl çözeceğini yaz."
+                );
+
+                firstInvalid =
+                    document.getElementById(
+                        "appTeamConflict"
+                    );
+
+                valid = false;
+
+            }
+
+        }
+
+
+        if (firstInvalid) {
+
+            firstInvalid.focus();
+
+        }
+
+
+        return valid;
+
     }
-}
 
-function previousStep() {
-    if (currentStep > 0) {
-        currentStep--;
-        showStep();
+
+    /* =====================================================
+       HATA MESAJI
+    ===================================================== */
+
+    function showFormError(message) {
+
+        let oldError =
+            document.getElementById(
+                "applicationFormError"
+            );
+
+
+        if (!oldError) {
+
+            oldError =
+                document.createElement("div");
+
+            oldError.id =
+                "applicationFormError";
+
+            oldError.style.marginTop =
+                "15px";
+
+            oldError.style.padding =
+                "12px 15px";
+
+            oldError.style.borderRadius =
+                "10px";
+
+            oldError.style.background =
+                "rgba(239,68,68,.12)";
+
+            oldError.style.border =
+                "1px solid rgba(239,68,68,.35)";
+
+            oldError.style.color =
+                "#ff8b8b";
+
+            oldError.style.fontSize =
+                "14px";
+
+            const formButtons =
+                document.querySelector(
+                    ".form-buttons"
+                );
+
+            if (formButtons) {
+
+                formButtons.before(oldError);
+
+            }
+
+        }
+
+
+        oldError.textContent =
+            "⚠️ " + message;
+
+
+        clearTimeout(
+            window.medavErrorTimeout
+        );
+
+
+        window.medavErrorTimeout =
+            setTimeout(() => {
+
+                oldError.remove();
+
+            }, 5000);
+
     }
-}
 
-function updateSummary() {
-    const data = new FormData(form);
 
-    const fields = [
-        ["Ad Soyad", data.get("isim")],
-        ["Yaş", data.get("yas")],
-        ["Discord", data.get("discord")],
-        ["FiveM Süresi", data.get("fivem")],
-        ["Aktiflik", data.get("aktiflik")],
-        ["Yetkili Deneyimi", data.get("deneyim")],
-        ["Sunucular", data.get("sunucular")],
-        ["Neden MedaV", data.get("neden")],
-        ["Neden Tercih", data.get("tercih")],
-        ["RP Bilgisi", data.get("rp")],
-        ["Tartışma Yaklaşımı", data.get("tartisma")],
-        ["Tarafsızlık", data.get("tarafsizlik")],
-        ["Ekip Anlaşmazlığı", data.get("anlasmazlik")],
-        ["Ek Bilgi", data.get("ek") || "Belirtilmedi"]
-    ];
+    /* =====================================================
+       HATA TEMİZLE
+    ===================================================== */
 
-    summary.innerHTML = fields
-        .map(([title, value]) => `
-            <div class="summary-item">
-                <strong>${escapeHTML(title)}</strong>
-                <span>${escapeHTML(value || "-")}</span>
+    function clearFormError() {
+
+        const error =
+            document.getElementById(
+                "applicationFormError"
+            );
+
+        if (error) {
+            error.remove();
+        }
+
+    }
+
+
+    /* =====================================================
+       ADIM GÖSTER
+    ===================================================== */
+
+    function updateStep() {
+
+        formSteps.forEach((step) => {
+
+            const stepNumber =
+                Number(
+                    step.dataset.step
+                );
+
+            step.classList.toggle(
+                "active",
+                stepNumber === currentStep
+            );
+
+        });
+
+
+        /* ================================================
+           PROGRESS
+        ================================================ */
+
+        if (applicationProgress) {
+
+            const percentage =
+                (
+                    currentStep /
+                    totalSteps
+                ) * 100;
+
+            applicationProgress.style.width =
+                `${percentage}%`;
+
+        }
+
+
+        /* ================================================
+           GERİ
+        ================================================ */
+
+        if (previousStepButton) {
+
+            previousStepButton.style.display =
+                currentStep === 1
+                    ? "none"
+                    : "inline-flex";
+
+        }
+
+
+        /* ================================================
+           İLERİ / GÖNDER
+        ================================================ */
+
+        if (nextStepButton) {
+
+            nextStepButton.style.display =
+                currentStep === totalSteps
+                    ? "none"
+                    : "inline-flex";
+
+        }
+
+
+        if (submitApplicationButton) {
+
+            submitApplicationButton.style.display =
+                currentStep === totalSteps
+                    ? "inline-flex"
+                    : "none";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       İLERİ
+    ===================================================== */
+
+    if (nextStepButton) {
+
+        nextStepButton.addEventListener(
+            "click",
+            () => {
+
+                clearFormError();
+
+
+                if (!validateStep(currentStep)) {
+                    return;
+                }
+
+
+                if (
+                    currentStep <
+                    totalSteps
+                ) {
+
+                    currentStep++;
+
+                    updateStep();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       GERİ
+    ===================================================== */
+
+    if (previousStepButton) {
+
+        previousStepButton.addEventListener(
+            "click",
+            () => {
+
+                clearFormError();
+
+
+                if (currentStep > 1) {
+
+                    currentStep--;
+
+                    updateStep();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       BAŞVURU VERİLERİ
+    ===================================================== */
+
+    function collectApplicationData() {
+
+        const discord =
+            getValue("appDiscord");
+
+        const discordName =
+            discord;
+
+        const discordActivity =
+            getValue("appActivity");
+
+        const age =
+            getValue("appAge");
+
+        const activity =
+            getValue("appActivity");
+
+        const fivemExperience =
+            getValue("appFiveMTime");
+
+        const previousStaff =
+            getRadioValue("experience");
+
+        const previousStaffExperience =
+            getValue("appServers");
+
+        const characterName =
+            getValue("appName");
+
+        const rpExperience =
+            getValue("appRpKnowledge");
+
+        const whyStaff =
+            getValue("appWhyJoin");
+
+        const strongSides =
+            getValue("appWhyYou");
+
+        const argument =
+            getValue("appArgument");
+
+        const neutrality =
+            getValue("appNeutrality");
+
+        const teamConflict =
+            getValue("appTeamConflict");
+
+        const extraNote =
+            getValue("appExtra");
+
+
+        /*
+         * server.js "staffTeam" alanını zorunlu
+         * tuttuğu için mevcut formdaki başvuru
+         * türünü buraya gönderiyoruz.
+         */
+
+        const staffTeam =
+            "MedaV Yetkili Ekibi";
+
+
+        /*
+         * server.js "weakSides" alanını zorunlu
+         * tuttuğu için yönetim sorularını tek
+         * alanda birleştiriyoruz.
+         */
+
+        const weakSides =
+            [
+                "Tartışma Durumunda:",
+                argument,
+
+                "",
+
+                "Tarafsızlığımı Koruma:",
+                neutrality,
+
+                "",
+
+                "Ekip İçi Anlaşmazlık:",
+                teamConflict
+            ].join("\n");
+
+
+        return {
+
+            discord,
+            discordName,
+            discordActivity,
+
+            age,
+            activity,
+            fivemExperience,
+
+            previousStaff,
+            previousStaffExperience,
+
+            characterName,
+            rpExperience,
+
+            staffTeam,
+            whyStaff,
+
+            strongSides,
+            weakSides,
+
+            extraNote
+
+        };
+
+    }
+
+
+    /* =====================================================
+       FORM GÖNDER
+    ===================================================== */
+
+    if (applicationForm) {
+
+        applicationForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+                clearFormError();
+
+
+                /*
+                 * Son adımdan gönderildiğinden emin ol.
+                 */
+
+                if (
+                    !validateStep(currentStep)
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Bütün adımları tekrar kontrol et.
+                 */
+
+                for (
+                    let step = 1;
+                    step <= totalSteps;
+                    step++
+                ) {
+
+                    if (!validateStep(step)) {
+
+                        currentStep =
+                            step;
+
+                        updateStep();
+
+                        return;
+
+                    }
+
+                }
+
+
+                const data =
+                    collectApplicationData();
+
+
+                /*
+                 * Butonu kilitle.
+                 */
+
+                if (submitApplicationButton) {
+
+                    submitApplicationButton.disabled =
+                        true;
+
+                    submitApplicationButton.textContent =
+                        "Gönderiliyor...";
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/yetkili-basvuru",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(data)
+
+                            }
+                        );
+
+
+                    let result = null;
+
+
+                    try {
+
+                        result =
+                            await response.json();
+
+                    } catch {
+
+                        result = null;
+
+                    }
+
+
+                    if (
+                        !response.ok ||
+                        !result ||
+                        !result.success
+                    ) {
+
+                        throw new Error(
+                            result?.message ||
+                            "Başvuru gönderilemedi."
+                        );
+
+                    }
+
+
+                    /*
+                     * BAŞARILI
+                     */
+
+                    showSuccessMessage(
+                        result.message ||
+                        "Başvurun başarıyla gönderildi."
+                    );
+
+
+                    applicationForm.reset();
+
+
+                    currentStep = 1;
+
+                    updateStep();
+
+
+                    /*
+                     * Birkaç saniye sonra modalı kapat.
+                     */
+
+                    setTimeout(() => {
+
+                        closeApplication();
+
+                    }, 3500);
+
+
+                } catch (error) {
+
+                    console.error(
+                        "MedaV başvuru hatası:",
+                        error
+                    );
+
+
+                    showFormError(
+                        error.message ||
+                        "Başvuru gönderilirken bir hata oluştu."
+                    );
+
+
+                } finally {
+
+                    if (submitApplicationButton) {
+
+                        submitApplicationButton.disabled =
+                            false;
+
+                        submitApplicationButton.textContent =
+                            "Başvuruyu Gönder";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       BAŞARILI MESAJ
+    ===================================================== */
+
+    function showSuccessMessage(message) {
+
+        let successBox =
+            document.getElementById(
+                "applicationSuccess"
+            );
+
+
+        if (!successBox) {
+
+            successBox =
+                document.createElement("div");
+
+            successBox.id =
+                "applicationSuccess";
+
+            successBox.style.position =
+                "fixed";
+
+            successBox.style.left =
+                "50%";
+
+            successBox.style.top =
+                "50%";
+
+            successBox.style.transform =
+                "translate(-50%, -50%)";
+
+            successBox.style.zIndex =
+                "999999";
+
+            successBox.style.width =
+                "min(90%, 500px)";
+
+            successBox.style.padding =
+                "30px";
+
+            successBox.style.borderRadius =
+                "18px";
+
+            successBox.style.textAlign =
+                "center";
+
+            successBox.style.background =
+                "#11111b";
+
+            successBox.style.border =
+                "1px solid rgba(139,92,246,.5)";
+
+            successBox.style.boxShadow =
+                "0 25px 80px rgba(0,0,0,.6)";
+
+            successBox.style.color =
+                "#fff";
+
+            document.body.appendChild(
+                successBox
+            );
+
+        }
+
+
+        successBox.innerHTML = `
+
+            <div style="
+                font-size:42px;
+                margin-bottom:15px;
+            ">
+                ✓
             </div>
-        `)
-        .join("");
-}
 
-function submitApplication() {
-    if (!validateCurrentStep()) {
-        return;
+            <h2 style="
+                margin:0 0 10px;
+            ">
+                Başvuru Gönderildi
+            </h2>
+
+            <p style="
+                margin:0;
+                opacity:.75;
+                line-height:1.6;
+            ">
+                ${escapeHtml(message)}
+            </p>
+
+        `;
+
+
+        setTimeout(() => {
+
+            if (successBox) {
+                successBox.remove();
+            }
+
+        }, 3500);
+
     }
 
-    const data = new FormData(form);
 
-    console.log("MEDAV YETKİLİ BAŞVURUSU");
-    console.log("────────────────────────");
+    /* =====================================================
+       HTML GÜVENLİ METİN
+    ===================================================== */
 
-    for (const [key, value] of data.entries()) {
-        console.log(`${key}: ${value}`);
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            String(text);
+
+        return div.innerHTML;
+
     }
 
-    alert(
-        "Başvurun hazırlandı!\n\n" +
-        "Şu an form bilgileri tarayıcı konsoluna aktarılıyor.\n\n" +
-        "Discord'a otomatik gönderim için sonraki aşamada bağlantıyı kuracağız."
+
+    /* =====================================================
+       MÜZİK SİSTEMİ
+    ===================================================== */
+
+    const musicPlayButton =
+        document.getElementById(
+            "musicPlayButton"
+        );
+
+    const musicMuteButton =
+        document.getElementById(
+            "musicMuteButton"
+        );
+
+    const musicVolume =
+        document.getElementById(
+            "musicVolume"
+        );
+
+
+    /*
+     * Dosya yolu:
+     *
+     * assets/music/medav.mp3
+     *
+     * Eğer senin çalışan dosyan farklı klasördeyse
+     * sadece aşağıdaki yolu değiştir.
+     */
+
+    const music =
+        new Audio(
+            "assets/music/medav.mp3"
+        );
+
+
+    music.loop = true;
+
+    music.volume = 0.5;
+
+
+    let musicPlaying = false;
+
+    let musicMuted = false;
+
+
+    /* =====================================================
+       MÜZİK OYNAT
+    ===================================================== */
+
+    if (musicPlayButton) {
+
+        musicPlayButton.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    if (!musicPlaying) {
+
+                        await music.play();
+
+                        musicPlaying =
+                            true;
+
+                        musicPlayButton.textContent =
+                            "❚❚";
+
+                    } else {
+
+                        music.pause();
+
+                        musicPlaying =
+                            false;
+
+                        musicPlayButton.textContent =
+                            "▶";
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Müzik oynatılamadı:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       MÜZİK SES
+    ===================================================== */
+
+    if (musicVolume) {
+
+        musicVolume.addEventListener(
+            "input",
+            () => {
+
+                const volume =
+                    Number(
+                        musicVolume.value
+                    );
+
+                music.volume =
+                    volume;
+
+                if (volume > 0) {
+
+                    musicMuted =
+                        false;
+
+                }
+
+                updateMuteIcon();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       MÜZİK MUTE
+    ===================================================== */
+
+    if (musicMuteButton) {
+
+        musicMuteButton.addEventListener(
+            "click",
+            () => {
+
+                musicMuted =
+                    !musicMuted;
+
+                music.muted =
+                    musicMuted;
+
+                updateMuteIcon();
+
+            }
+        );
+
+    }
+
+
+    function updateMuteIcon() {
+
+        if (!musicMuteButton) {
+            return;
+        }
+
+
+        if (
+            musicMuted ||
+            music.volume === 0
+        ) {
+
+            musicMuteButton.textContent =
+                "🔇";
+
+        } else {
+
+            musicMuteButton.textContent =
+                "🔊";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       NAVBAR
+    ===================================================== */
+
+    const navLinks =
+        document.querySelectorAll(
+            ".nav-link"
+        );
+
+
+    navLinks.forEach((link) => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                navLinks.forEach(
+                    (item) => {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                link.classList.add(
+                    "active"
+                );
+
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       BAŞLANGIÇ
+    ===================================================== */
+
+    updateStep();
+
+
+    console.log(
+        "🟣 MedaV script.js başarıyla yüklendi."
     );
 
-    closeApplication();
-
-    form.reset();
-
-    currentStep = 0;
-    showStep();
-}
-
-function escapeHTML(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-modal.addEventListener("click", function (event) {
-    if (event.target === modal) {
-        closeApplication();
-    }
 });
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && modal.classList.contains("active")) {
-        closeApplication();
-    }
-});
-
-showStep();
