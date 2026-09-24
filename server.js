@@ -18,14 +18,10 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const BOT_TOKEN =
-    process.env.DISCORD_BOT_TOKEN?.trim();
+const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN?.trim();
 
-const APPLICATION_CHANNEL_ID =
-    "1551815098170081401";
-
-const STAFF_ROLE_ID =
-    "1551830696111243295";
+const APPLICATION_CHANNEL_ID = "1551815098170081401";
+const STAFF_ROLE_ID = "1551830696111243295";
 
 
 /* =====================================================
@@ -48,58 +44,67 @@ app.get("/health", (req, res) => {
 ===================================================== */
 
 const client = new Client({
-
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers
     ]
-
 });
 
 
 /* =====================================================
-   DISCORD DEBUG
+   DISCORD BAĞLANTI TAKİBİ
 ===================================================== */
 
 client.on("debug", (info) => {
 
-    console.log(
-        "🔎 Discord Debug:",
-        info
-    );
+    // Token bilgisi içeren debug mesajlarını gösterme
+    if (
+        info.includes("Provided token") ||
+        info.toLowerCase().includes("token")
+    ) {
+        console.log("🔎 Discord Debug: Token bilgisi gizlendi.");
+        return;
+    }
 
+    console.log("🔎 Discord Debug:", info);
 });
+
 
 client.on("warn", (info) => {
 
-    console.warn(
-        "⚠️ Discord Warn:",
-        info
-    );
+    console.warn("⚠️ Discord Warn:", info);
 
 });
+
 
 client.on("shardDisconnect", (event) => {
 
     console.error(
         "🔴 Discord bağlantısı kesildi:",
-        event
+        event?.code || event
     );
 
 });
+
 
 client.on("shardReconnecting", () => {
 
-    console.log(
-        "🟡 Discord yeniden bağlanıyor..."
-    );
+    console.log("🟡 Discord yeniden bağlanıyor...");
 
 });
 
+
 client.on("shardReady", (id) => {
 
-    console.log(
-        `🟢 Discord shard hazır: ${id}`
+    console.log(`🟢 Discord shard hazır: ${id}`);
+
+});
+
+
+client.on("invalidated", () => {
+
+    console.error(
+        "🔴 Discord bağlantısı geçersiz hale geldi."
     );
 
 });
@@ -133,24 +138,27 @@ client.once("clientReady", () => {
 
 
 /* =====================================================
-   HATA
+   DISCORD HATALARI
 ===================================================== */
 
 client.on("error", (error) => {
 
     console.error(
-        "❌ Discord Client Hatası:",
-        error
+        "❌ Discord Client Hatası:"
     );
 
+    console.error(error);
+
 });
+
 
 client.on("shardError", (error) => {
 
     console.error(
-        "❌ Discord Shard Hatası:",
-        error
+        "❌ Discord Shard Hatası:"
     );
+
+    console.error(error);
 
 });
 
@@ -180,7 +188,7 @@ function safeText(value) {
 
 
 /* =====================================================
-   BAŞVURU
+   YETKİLİ BAŞVURUSU
 ===================================================== */
 
 app.post(
@@ -1079,11 +1087,17 @@ if (!BOT_TOKEN) {
         .catch((error) => {
 
             console.error(
-                "❌ Discord login başarısız:"
+                "❌ Discord login başarısız!"
             );
 
             console.error(
-                error
+                "Hata kodu:",
+                error?.code || "Bilinmiyor"
+            );
+
+            console.error(
+                "Hata mesajı:",
+                error?.message || "Bilinmiyor"
             );
 
         });
